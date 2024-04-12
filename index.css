@@ -666,3 +666,20 @@ body {
 .institution_Bsc p {
   margin: 0; /* Remove default margin */
 }
+
+
+.institution_proj {
+  display: flex;
+  align-items: left; /* Align items vertically */
+}
+
+.institution_proj img {
+  width: 100px; /* Adjust as needed */
+  height: auto;
+  margin-right: 20px; /* Adjust spacing between logo and text */
+}
+
+.institution_proj h3,
+.institution_proj p {
+  margin: 0; /* Remove default margin */
+}
