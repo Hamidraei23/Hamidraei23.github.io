@@ -1,353 +1,1240 @@
-<!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Hamidraei23</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/magic-grid/dist/magic-grid.min.js"></script>
-  <link rel="stylesheet" href="index.css">
-<link rel="icon" href="https://avatars.githubusercontent.com/u/70615022?v=4" type="image/png"></head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hamidreza Raei | Robotics Researcher</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.0.8/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.8/index.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg-primary: #2c2d35;
+  --bg-secondary: #393979;
+  --bg-tertiary: #cdcdd3;
+  --accent-cyan: #00f0ff;
+  --accent-green: #00ff88;
+  --accent-purple: #b060ff;
+  --text-primary: #e0e0e8;
+  --text-secondary: #a0a0b0;
+  --text-muted: #606070;
+  --border: rgba(0, 240, 255, 0.15);
+  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.3);
+  --glow-green: 0 0 20px rgba(0, 255, 136, 0.3);
+}
 
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Hacker Grid Background */
+#grid-canvas {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -2;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* Scanlines */
+#scanlines {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: 0.4;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.2rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.4rem;
+  color: var(--accent-cyan);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-shadow: var(--glow-cyan);
+}
+
+.logo::before {
+  content: '>';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; width: 0; height: 2px;
+  background: var(--accent-cyan);
+  transition: width 0.3s ease;
+  box-shadow: var(--glow-cyan);
+}
+
+.nav-links a:hover {
+  color: var(--accent-cyan);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Hero Section */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  position: relative;
+}
+
+.hero-badge {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 0.5rem 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--glow-cyan);
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.typing-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  color: var(--accent-green);
+  min-height: 1.5em;
+  margin-bottom: 3rem;
+}
+
+.typing-text::after {
+  content: '|';
+  animation: blink 0.8s infinite;
+  color: var(--accent-green);
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  color: #000;
+  font-weight: 600;
+  box-shadow: var(--glow-cyan);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 240, 255, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.btn-outline:hover {
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow: var(--glow-cyan);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.scroll-indicator i {
+  font-size: 1.2rem;
+  color: var(--accent-cyan);
+}
+
+/* Sections */
+section {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent-green);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.section-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+  margin: 1rem auto 0;
+  border-radius: 2px;
+  box-shadow: var(--glow-cyan);
+}
+
+/* Education Section */
+.education-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.edu-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.edu-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 3px; height: 100%;
+  background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.edu-card:hover {
+  transform: translateX(8px);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.edu-card:hover::before {
+  opacity: 1;
+}
+
+.edu-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.edu-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.5rem;
+}
+
+.edu-content {
+  flex: 1;
+}
+
+.edu-degree {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-bottom: 0.25rem;
+}
+
+.edu-institution {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.edu-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.edu-thesis {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  border-left: 2px solid var(--accent-green);
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Projects Section */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2rem;
+}
+
+.project-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.project-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 10px 40px rgba(0, 240, 255, 0.2);
+}
+
+.project-header {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.05), rgba(176, 96, 255, 0.05));
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.project-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--accent-cyan);
+}
+
+.project-status {
+  margin-left: auto;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  background: rgba(0, 255, 136, 0.15);
+  color: var(--accent-green);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.project-body {
+  padding: 1.5rem;
+}
+
+.project-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.project-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--accent-cyan);
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.project-footer {
+  padding: 1rem 1.5rem;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-link {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.project-link:hover {
+  color: var(--accent-green);
+}
+
+.project-venue {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Video Section */
+.video-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+}
+
+.video-container video,
+.video-container iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-placeholder {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-tertiary), #050508);
+  color: var(--text-muted);
+}
+
+.video-placeholder i {
+  font-size: 4rem;
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.video-instructions {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px dashed var(--accent-cyan);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.video-instructions code {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--accent-green);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+/* Skills Section */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.skill-category {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.skill-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skill-list {
+  list-style: none;
+}
+
+.skill-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skill-item:last-child { border-bottom: none; }
+
+.skill-dot {
+  width: 8px; height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  box-shadow: var(--glow-green);
+  flex-shrink: 0;
+}
+
+.skill-item span {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Experience Timeline */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple));
+  box-shadow: var(--glow-cyan);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2.5rem;
+  padding-left: 1.5rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -1.55rem;
+  top: 0.5rem;
+  width: 14px;
+  height: 14px;
+  background: var(--bg-primary);
+  border: 3px solid var(--accent-cyan);
+  border-radius: 50%;
+  box-shadow: var(--glow-cyan);
+}
+
+.timeline-date {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent-green);
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.timeline-org {
+  font-size: 0.95rem;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.timeline-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 3rem 2rem;
+  text-align: center;
+  background: var(--bg-secondary);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-tertiary);
+}
+
+.footer-links a:hover {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-3px);
+}
+
+.footer-text {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav { padding: 1rem; }
+  .nav-links { display: none; }
+  section { padding: 3rem 1.5rem; }
+  .edu-card { flex-direction: column; padding: 1.5rem; }
+  .edu-logo { width: 80px; height: 80px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
 <body>
-  <div id="loading">
-    <div id="spinner"></div>
+
+<canvas id="grid-canvas"></canvas>
+<div id="scanlines"></div>
+
+<nav>
+  <a href="#" class="logo">H_Raei</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#video">Demos</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-badge">
+    <i class="fas fa-circle" style="width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; box-shadow: var(--glow-green);"></i>
+    Available for Collaboration
   </div>
-  <div id="profile">
-    <div id="profile_img" style="background: url(https://avatars.githubusercontent.com/u/70615022?v=4) center;"></div>
-    <div id="username"><span style="display:none;">null</span><a href="https://github.com/Hamidraei23">@Hamidraei23</a></div>
-    <div id="userbio" style="display: none;">undefined</div>
-    <div id="about">
-              <span style="display:none;"><i class="fas fa-users"></i> &nbsp; null</span>
-              <span style="display:none;"><i class="fas fa-envelope"></i> &nbsp; null</span>
-              <span style="display:none;"><i class="fas fa-link"></i> &nbsp; <a href=""></a></span>
-              <span style="display:none;"><i class="fas fa-map-marker-alt"></i> &nbsp;&nbsp; null</span>
-              <span style="display:none;"><i class="fas fa-user-tie"></i> &nbsp;&nbsp; Available for hire</span>
-              <div class="socials">
-              <span style="display:none !important;"><a href="https://www.twitter.com/undefined" target="_blank" class="socials"><i class="fab fa-twitter"></i></a></span>
-              <span style="display:none !important;"><a href="https://www.dribbble.com/undefined" target="_blank" class="socials"><i class="fab fa-dribbble"></i></a></span>
-              <span style="display:none !important;"><a href="https://www.linkedin.com/in/undefined/" target="_blank" class="socials"><i class="fab fa-linkedin-in"></i></a></span>
-              <span style="display:none !important;"><a href="https://www.medium.com/@undefined/" target="_blank" class="socials"><i class="fab fa-medium-m"></i></a></span>
-              </div>
-              </div>
+  <h1 class="hero-title">Hamidreza Raei</h1>
+  <p class="hero-subtitle">Robotics & Reinforcement Learning </p>
+  <div class="typing-text" id="typing-text"></div>
+  <div class="hero-actions">
+    <a href="https://nearlab.polimi.it/neuroengineering-and-medical-robotics/medical/hamidreza-raei/" class="btn btn-primary"><i class="fas fa-globe"></i> View Portfolio</a>
+    <a href="https://github.com/Hamidraei23" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
+    <a href="https://www.linkedin.com/in/hamidreza-raei/" class="btn btn-outline"><i class="fab fa-linkedin"></i> LinkedIn</a>
   </div>
+  <div class="scroll-indicator">
+    <span>Scroll to explore</span>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
 
-  <div id="display">
-    <div id="edu">
-      <h1>Education</h1>
-      <div class="projects" id="work_section">
-        
-        <section class="education">
-          <div class="institution_Phd">
-          <img class="logo" src="https://raw.githubusercontent.com/Hamidraei23/Hamidraei23.github.io/main/pics_io/Logo_Politecnico_Milano.png" alt="Institution Logo">
-            <div class="details">
-            <h3>Politecnico di Milano</h3>
-            <p>Doctoral Degree | 2023 - so far</p>
-            </div>
-            <!-- Add thesis title and logo here -->
-          </div>
-        </section>
-        
+<section id="about">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag">&lt;about&gt;</span>
+    <h2 class="section-title">Research Interests</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+    <div class="animate-on-scroll" style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: 0.3s;" onmouseover="this.style.boxShadow='var(--glow-cyan)'" onmouseout="this.style.boxShadow='none'">
+      <div style="font-size: 1.5rem; color: var(--accent-cyan); margin-bottom: 0.5rem;"><i class="fas fa-brain"></i></div>
+      <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">Reinforcement Learning</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">Developing RL algorithms for sim-to-real transfer, non-prehensile manipulation, and locomotion control on quadruped robots.</p>
+    </div>
+    <div class="animate-on-scroll" style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: 0.3s;" onmouseover="this.style.boxShadow='var(--glow-green)'" onmouseout="this.style.boxShadow='none'">
+      <div style="font-size: 1.5rem; color: var(--accent-green); margin-bottom: 0.5rem;"><i class="fas fa-eye"></i></div>
+      <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">Computer Vision & ML</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">Multi-modal sensor fusion (LiDAR, Camera, IMU), visual odometry, and deep learning for autonomous systems.</p>
+    </div>
+    <div class="animate-on-scroll" style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: 0.3s;" onmouseover="this.style.boxShadow='0 0 20px rgba(176, 96, 255, 0.3)'" onmouseout="this.style.boxShadow='none'">
+      <div style="font-size: 1.5rem; color: var(--accent-purple); margin-bottom: 0.5rem;"><i class="fas fa-robot"></i></div>
+      <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">Data-Driven Control</h3>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">Model-based and model-free control architectures for mobile collaborative robots and UAVs.</p>
+    </div>
+  </div>
+</section>
 
-        
-        
-        <section class="education">
-          <div class="institution_MS">
-            <img class="logo" src="https://raw.githubusercontent.com/Hamidraei23/Hamidraei23.github.io/main/pics_io/GISTLOGO.png" alt="Institution Logo">
-            <div class="details">
-              <h3>Gwangju Institute of Science and Technology</h3>
-              <p>Master Degree | 2020 - 2022</p>
-              <p>Thesis Title: Autonomous Landing of a quadrotor on a moving target using integrated sensor</p>
-            </div>
-          </div>
-        </section>
-        
-        
-
-        <section class="education">
-          <div class="institution_Bsc">
-          <img class="logo" src="https://raw.githubusercontent.com/Hamidraei23/Hamidraei23.github.io/main/pics_io/Isfahan_University_of_Technology_(seal).svg.png" alt="Institution Logo">
-            <div class="details">
-            <h3>Isfahan University of Technology</h3>
-            <p>Bachelor's Degree | 2015 - 2020</p>
-            </div>
-            <!-- Add thesis title and logo here -->
-          </div>
-        </section>
-    
-
-        <style>
-          .publications .details h3,
-          .publications .details p {
-            color: rgb(0, 0, 0); /* Change text color to white */
-          }
-        </style>
-      <h1>Publications</h1>
-      <div class="projects" id="work_section">
-    
-        <section class="publications">
-          <div class="publication">
-              <div class="institution_MS">
-                  <a href="https://ieeexplore.ieee.org/abstract/document/9828342" target="_blank">
-                      <div class="details">
-                          <h3>Autonomous landing on moving targets using LiDAR, Camera and IMU sensor Fusion</h3>
-                          <p>2022</p>
-                      </div>
-                  </a>
-              </div>
-          </div>
-      </section>
-
-      <section class="publications">
-          <div class="publication">
-              <div class="institution_MS">
-                  <a href="https://ieeexplore.ieee.org/abstract/document/9649900" target="_blank">
-                      <div class="details">
-                          <h3>Design of the Auto Gain Control amplifier based on a resistance modeling of the MOSFET for a distance accuracy of the ToF LiDAR</h3>
-                          <p>2021</p>
-                      </div>
-                  </a>
-              </div>
-          </div>
-          <!-- Add more div containers for additional publications -->
-      </section>
-    
-      
-    
-
-    
-        <h1>Projects</h1>
-        <!-- <div class="projects" id="work_section"> -->
-
-          <section class="education">
-            <div class="institution_proj">
-            <img class="logo" src="https://github.com/Hamidraei23/Hamidraei23.github.io/blob/main/pics_io/teleop_interface.png?raw=true" alt="Institution Logo">
-              <div class="details">
-              <h3>Teleoperation Interface based on visual odometry</h3>
-              <p>This letter presents a novel visuo-haptic interface for Mobile Collaborative Robots, integrating detachable mechanisms and Visual-Inertial Odometry for adaptable control modes, offering comparable performance to commercial MoCap systems in a cost-effective, versatile design.</p>
-              </div>
-              <!-- Add thesis title and logo here -->
-            </div>
-          </section>
-          
-          <section class="education">
-            <div class="institution_proj">
-            <img class="logo" src="https://github.com/Hamidraei23/Hamidraei23.github.io/blob/main/pics_io/photo_5821445548727713861_y.jpg?raw=true" alt="Institution Logo">
-              <div class="details">
-              <h3>LiDAR, Camera and IMU fusion for Autonomous landing on moving target</h3>
-              <p>Employing a one-dimensional LiDAR and camera fusion, we achieve precise target localization, utilizing drone altitude, camera view, and IMU data for accurate 3D positioning.</p>
-              </div>
-              <!-- Add thesis title and logo here -->
-            </div>
-          </section>
-          
-
-          
-          
-          <section class="education">
-            <div class="institution_proj">
-              <img class="logo" src="https://github.com/Hamidraei23/Hamidraei23.github.io/blob/main/pics_io/autonomous_driving.png?raw=true" alt="Institution Logo">
-              <div class="details">
-                <h3>Speed Estimation using dash Camera</h3>
-                <!-- <p>Master Degree | 2020 - 2022</p> -->
-                <p>This project leverages comma.ai's dataset and OpenCV's optical flow alongside a CNN trained in TensorFlow, achieving a validation MSE of approximately 7.56 for speed estimation from dashcam footage.</p>
-              </div>
-            </div>
-          </section>
-          
-          
-
-          <section class="education">
-            <div class="institution_proj">
-            <img class="logo" src="https://github.com/Hamidraei23/Hamidraei23.github.io/blob/main/pics_io/system_control.png?raw=true" alt="Institution Logo">
-              <div class="details">
-              <h3>Fuzzy-PID auto Tuner (Simulation)</h3>
-              <p>
-                I developed an m-file for system behavior interpretation, including peak detection and settling time determination, followed by fuzzy controller design for PID tuning, showcased in an accompanying video.</p>
-              </div>
-              <!-- Add thesis title and logo here -->
-            </div>
-          </section>
-
-          <section class="education">
-            <div class="institution_proj">
-            <img class="logo" src="https://github.com/Hamidraei23/Hamidraei23.github.io/blob/main/pics_io/ball_beam.png?raw=true" alt="Institution Logo">
-              <div class="details">
-              <h3>Ball and Beam Control</h3>
-              <p>Engineered a system for precise ball positioning on a beam, leveraging servo motor, potentiometer feedback, and Arduino-based PID control. Employed Matlab-Simulink for real-time programming and fuzzy control, optimizing performance.</p>
-              </div>
-              <!-- Add thesis title and logo here -->
-            </div>
-          </section>
-      
+<section id="education">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag">&lt;education&gt;</span>
+    <h2 class="section-title">Academic Background</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="education-grid">
+    <div class="edu-card animate-on-scroll">
+      <div class="edu-logo">
+        <img src="https://raw.githubusercontent.com/Hamidraei23/Hamidraei23.github.io/main/pics_io/Logo_Politecnico_Milano.png" alt="Politecnico di Milano">
+      </div>
+      <div class="edu-content">
+        <h3 class="edu-degree">PhD in Electronic, Information and Bio-engineering</h3>
+        <p class="edu-institution">Polytechnic University of Milan</p>
+        <div class="edu-meta">
+          <span><i class="fas fa-calendar-alt"></i> Sep 2023 – Present</span>
+          <span><i class="fas fa-star"></i> GPA: 29.66/30</span>
+          <span><i class="fas fa-award"></i> Marie Skłodowska-Curie Scholar</span>
         </div>
+        <div class="edu-thesis">Focus: Reinforcement Learning for Robotics & Human-Robot Interaction</div>
       </div>
     </div>
-        
-    <div id="work">
-      <h1>Repos</h1>
-      <div class="projects" id="work_section">
-                      <a href="https://github.com/Hamidraei23/dashcamera_speed_estimation_CNN" target="_blank">
-                      <section>
-                          <div class="section_title">dashcamera_speed_estimation_CNN</div>
-                          <div class="about_section">
-                          <span style="display:none;">undefined</span>
-                          </div>
-                          <div class="bottom_section">
-                              
-                              <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; Jupyter Notebook</span>
-                              <!-- <span><i class="fas fa-star"></i>&nbsp; 0</span> -->
-                              <!-- <span><i class="fas fa-code-branch"></i>&nbsp; 0</span> -->
-                          </div>
-                      </section>
-                      </a>
-                      <a href="https://github.com/gistvisionclassroom/ca1-Hamidraei23-1" target="_blank">
-                      <section>
-                          <div class="section_title">ca1-Hamidraei23-1</div>
-                          <div class="about_section">
-                          <span style="display:block;">ca1-Hamidraei23-1 created by GitHub Classroom</span>
-                          </div>
-                          <div class="bottom_section">
-                              <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; Jupyter Notebook</span>
-                              <!-- <span><i class="fas fa-star"></i>&nbsp; 0</span> -->
-                              <!-- <span><i class="fas fa-code-branch"></i>&nbsp; 0</span> -->
-                          </div>
-                      </section>
-                      </a>
-                      <a href="https://github.com/gistvisionclassroom/ca2-hackathon-Hamidraei23" target="_blank">
-                      <section>
-                          <div class="section_title">ca2-hackathon-Hamidraei23</div>
-                          <div class="about_section">
-                          <span style="display:block;">ca2-hackathon-Hamidraei23 created by GitHub Classroom</span>
-                          </div>
-                          <div class="bottom_section">
-                              <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; Jupyter Notebook</span>
-                              <!-- <span><i class="fas fa-star"></i>&nbsp; 0</span> -->
-                              <!-- <span><i class="fas fa-code-branch"></i>&nbsp; 0</span> -->
-                          </div>
-                      </section>
-                      </a>
-                      <a href="https://github.com/Hamidraei23/LSTM" target="_blank">
-                      <section>
-                          <div class="section_title">LSTM</div>
-                          <div class="about_section">
-                          <span style="display:block;">Amazon Sentiment Analysis</span>
-                          </div>
-                          <div class="bottom_section">
-                              <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; Jupyter Notebook</span>
-                              <!-- <span><i class="fas fa-star"></i>&nbsp; 0</span> -->
-                              <!-- <span><i class="fas fa-code-branch"></i>&nbsp; 0</span> -->
-                          </div>
-                      </section>
-                      </a>
-                      <a href="https://github.com/hrii-iit/hrii_vo" target="_blank">
-                      <section>
-                          <div class="section_title">hrii_vo</div>
-                          <div class="about_section">
-                          <span style="display:block;">Visual Odometry used for teleoperation of Mobile Collaborative Robots (MCR)</span>
-                          </div>
-                          <div class="bottom_section">
-                              <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; C++</span>
-                              <!-- <span><i class="fas fa-star"></i>&nbsp; 0</span> -->
-                              <!-- <span><i class="fas fa-code-branch"></i>&nbsp; 0</span> -->
-                          </div>
-                      </section>
-                      </a>
-                      <a href="https://github.com/Hamidraei23/raicam_first_demo" target="_blank">
-                      <section>
-                          <div class="section_title">raicam_first_demo</div>
-                          <div class="about_section">
-                          <span style="display:block;">You'll find the ROBOTNIK platform simulation files and installation/setup instructions here.</span>
-                          </div>
-                          <div class="bottom_section">
-                              <span style="display:inline-block;"><i class="fas fa-code"></i>&nbsp; Dockerfile</span>
-                              <!-- <span><i class="fas fa-star"></i>&nbsp; 0</span> -->
-                              <!-- <span><i class="fas fa-code-branch"></i>&nbsp; 0</span> -->
-                          </div>
-                      </section>
-                      </a></div>
+    <div class="edu-card animate-on-scroll">
+      <div class="edu-logo">
+        <img src="https://raw.githubusercontent.com/Hamidraei23/Hamidraei23.github.io/main/pics_io/GISTLOGO.png" alt="GIST">
+      </div>
+      <div class="edu-content">
+        <h3 class="edu-degree">MSc in Mechanical Engineering</h3>
+        <p class="edu-institution">Gwangju Institute of Science and Technology</p>
+        <div class="edu-meta">
+          <span><i class="fas fa-calendar-alt"></i> Aug 2020 – Aug 2022</span>
+          <span><i class="fas fa-star"></i> GPA: 3.63/4.0</span>
+          <span><i class="fas fa-award"></i> Full Scholarship</span>
+        </div>
+        <div class="edu-thesis">Thesis: Camera and LiDAR Fusion for Autonomous Landing on Moving Targets</div>
+      </div>
     </div>
-    
-
-  
-
-    
-    </div>
-    <div id="forks" style="display:none;">
-      <h1>Forks.</h1>
-      <div class="projects" id="forks_section"></div>
-    </div>
-    <div id="blog_section">
-      <h1>Blog.</h1>
-      <div id="blogs"></div>
-    </div>
-    <div id="footer">
-      <!-- <a href="https://github.com/imfunniee" target="_blank">made on earth by a human</a> -->
+    <div class="edu-card animate-on-scroll">
+      <div class="edu-logo">
+        <img src="https://raw.githubusercontent.com/Hamidraei23/Hamidraei23.github.io/main/pics_io/Isfahan_University_of_Technology_(seal).svg.png" alt="IUT">
+      </div>
+      <div class="edu-content">
+        <h3 class="edu-degree">BSc in Mechanical Engineering</h3>
+        <p class="edu-institution">Isfahan University of Technology</p>
+        <div class="edu-meta">
+          <span><i class="fas fa-calendar-alt"></i> June 2020</span>
+          <span><i class="fas fa-star"></i> Last 2yr GPA: 3.46/4.0</span>
+        </div>
+        <div class="edu-thesis">Thesis: Controller Design for Ball and Beam System using Time-Response Analysis</div>
+      </div>
     </div>
   </div>
-  <script type="text/javascript">
-    setTimeout(function() {
-      document.getElementById("loading").classList.add("animated");
-      document.getElementById("loading").classList.add("fadeOut");
-      setTimeout(function() {
-        document.getElementById("loading").classList.remove("animated");
-        document.getElementById("loading").classList.remove("fadeOut");
-        document.getElementById("loading").style.display = "none";
-      }, 800);
-    }, 1500);
-    $.getJSON("blog.json", function(blog) {
-      blog = blog || [];
-      if (blog.length == 0) {
-        return (document.getElementById("blog_section").style.display =
-          "none");
+</section>
+
+<section id="projects">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag">&lt;publications_projects&gt;</span>
+    <h2 class="section-title">Recent Research & Projects</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card animate-on-scroll">
+      <div class="project-header">
+        <div class="project-icon"><i class="fas fa-paw"></i></div>
+        <span class="project-status">Submitted AIM 2026</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Sim-to-Real RL for Ball-Balancing Locomotion on Quadruped Robots</h3>
+        <p class="project-desc">Developed reinforcement learning framework enabling quadruped robots to perform dynamic ball-balancing locomotion with zero-shot sim-to-real transfer using domain randomization.</p>
+        <div class="project-tags">
+          <span class="tag">Reinforcement Learning</span>
+          <span class="tag">Sim-to-Real</span>
+          <span class="tag">Quadruped</span>
+          <span class="tag">MuJoCo</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-users"></i> Co-authors: Tian*, Raei*, Ajoudani, Trahanias</span>
+        <a href="https://doi.org/placeholder" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="project-card animate-on-scroll">
+      <div class="project-header">
+        <div class="project-icon"><i class="fas fa-hand-rock"></i></div>
+        <span class="project-status">Accepted RA-L 2025</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">RL Approach to Non-Prehensile Manipulation Through Sliding</h3>
+        <p class="project-desc">Actor-critic DDPG framework for sliding manipulation with LSTM-based real-time friction estimation. Achieved zero-shot sim-to-real transfer on hardware platforms.</p>
+        <div class="project-tags">
+          <span class="tag">DDPG</span>
+          <span class="tag">LSTM</span>
+          <span class="tag">Non-prehensile</span>
+          <span class="tag">Zero-shot Transfer</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-users"></i> Co-authors: Raei, De Momi, Ajoudani</span>
+        <a href="https://doi.org/10.1109/LRA.2025.3578238" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="project-card animate-on-scroll">
+      <div class="project-header">
+        <div class="project-icon"><i class="fas fa-mobile-alt"></i></div>
+        <span class="project-status">BioRob 2024</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Multipurpose Interface for Close/Far-Proximity MCR Control</h3>
+        <p class="project-desc">Designed visuo-haptic interface with detachable mechanisms and visual-inertial odometry for mobile collaborative robot control, matching commercial MoCap performance at lower cost.</p>
+        <div class="project-tags">
+          <span class="tag">HRI</span>
+          <span class="tag">Visual Odometry</span>
+          <span class="tag">MCR</span>
+          <span class="tag">ROS2</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-users"></i> Co-authors: Raei, Gandarias, De Momi, Balatti, Ajoudani</span>
+        <a href="https://doi.org/10.1109/BioRob60516.2024.10719833" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="project-card animate-on-scroll">
+      <div class="project-header">
+        <div class="project-icon"><i class="fas fa-helicopter"></i></div>
+        <span class="project-status">ASCC 2022</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Autonomous Landing on Moving Targets via Sensor Fusion</h3>
+        <p class="project-desc">Developed 30Hz relative localization system using 1D LiDAR, camera, and IMU fusion. Implemented PID, fuzzy-PID, and LQR controllers for UAV trajectory tracking and landing.</p>
+        <div class="project-tags">
+          <span class="tag">LiDAR</span>
+          <span class="tag">Camera</span>
+          <span class="tag">IMU</span>
+          <span class="tag">Kalman Filter</span>
+          <span class="tag">PX4</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-users"></i> Co-authors: Raei, Cho, Park</span>
+        <a href="https://doi.org/10.23919/ASCC56756.2022.9828342" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="project-card animate-on-scroll">
+      <div class="project-header">
+        <div class="project-icon"><i class="fas fa-car-side"></i></div>
+        <span class="project-status">Project</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Speed Estimation using Dash Camera & CNN</h3>
+        <p class="project-desc">Leveraged comma.ai dataset and OpenCV optical flow with TensorFlow CNN for vehicle speed estimation. Achieved validation MSE ~7.56 with custom architecture and dropout tuning.</p>
+        <div class="project-tags">
+          <span class="tag">TensorFlow</span>
+          <span class="tag">OpenCV</span>
+          <span class="tag">Optical Flow</span>
+          <span class="tag">CNN</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-code"></i> Python / TensorFlow</span>
+        <a href="https://github.com/Hamidraei23/dashcamera_speed_estimation_CNN" class="project-link">View Code <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="project-card animate-on-scroll">
+      <div class="project-header">
+        <div class="project-icon"><i class="fas fa-balance-scale"></i></div>
+        <span class="project-status">Project</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Ball & Beam Control & Fuzzy-PID Auto Tuner</h3>
+        <p class="project-desc">Engineered precision ball positioning system with servo motor, potentiometer feedback, and Arduino PID control. Developed MATLAB fuzzy logic auto-tuner for PID gains.</p>
+        <div class="project-tags">
+          <span class="tag">MATLAB</span>
+          <span class="tag">Simulink</span>
+          <span class="tag">Fuzzy Logic</span>
+          <span class="tag">Arduino</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-code"></i> C / MATLAB</span>
+        <a href="https://github.com/Hamidraei23" class="project-link">View Code <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="video">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag">&lt;demos&gt;</span>
+    <h2 class="section-title">Research Demos & Videos</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="video-section animate-on-scroll">
+    <div class="video-container">
+      <!-- 
+        🎬 VIDEO INSTRUCTIONS:
+        1. Create a folder named 'videos' in the same directory as this HTML file.
+        2. Place your video file inside it (e.g., 'videos/demo.mp4').
+        3. Update the src below: src="videos/demo.mp4"
+        4. Remove the placeholder div.
+      -->
+      <div class="video-placeholder" id="video-placeholder">
+        <i class="fas fa-play-circle"></i>
+        <p>No video loaded</p>
+        <div class="video-instructions">
+          📁 Place your video file in: <code>./videos/</code><br>
+          📝 Update the <code>&lt;video src=""&gt;</code> tag in the HTML<br>
+          🎬 Format: <code>MP4 / WebM</code> | Max recommended: 50MB
+        </div>
+      </div>
+      <!-- Uncomment and update when ready:
+      <video controls poster="videos/thumbnail.jpg">
+        <source src="videos/demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      -->
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag">&lt;experience&gt;</span>
+    <h2 class="section-title">Work Experience</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="timeline animate-on-scroll">
+    <div class="timeline-item">
+      <div class="timeline-date">Dec 2022 – Present</div>
+      <h3 class="timeline-title">Research Fellow</h3>
+      <p class="timeline-org">Human-Robot Interfaces and Interaction Lab (HRI²) @ IIT</p>
+      <p class="timeline-desc">Developing RL-based manipulation and human-robot collaboration interfaces. Leading projects on sim-to-real transfer and visuo-haptic teleoperation.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Sep 2020 – Nov 2022</div>
+      <h3 class="timeline-title">Research Assistant</h3>
+      <p class="timeline-org">Dynamics and Control Lab @ GIST</p>
+      <p class="timeline-desc">Worked on UAV localization, multi-sensor fusion (LiDAR/Camera/IMU), and advanced control systems (PID, LQR, Fuzzy) for autonomous landing on moving platforms.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Jan 2018 – Aug 2018</div>
+      <h3 class="timeline-title">Engineering Intern</h3>
+      <p class="timeline-org">Shahid Mohammad Montazeri Power Plant</p>
+      <p class="timeline-desc">Gained practical experience in power plant operations, control systems monitoring, and industrial automation workflows.</p>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag">&lt;skills&gt;</span>
+    <h2 class="section-title">Technical Skills</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-category animate-on-scroll">
+      <h3 class="skill-title"><i class="fas fa-code"></i> Programming</h3>
+      <ul class="skill-list">
+        <li class="skill-item"><span class="skill-dot"></span> <span>Python (TensorFlow, PyTorch, OpenCV)</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>C++ (ROS2, Real-time systems)</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>MATLAB & Simulink</span></li>
+      </ul>
+    </div>
+    <div class="skill-category animate-on-scroll">
+      <h3 class="skill-title"><i class="fas fa-robot"></i> Robotics & Simulation</h3>
+      <ul class="skill-list">
+        <li class="skill-item"><span class="skill-dot"></span> <span>ROS1 / ROS2</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>MuJoCo, Isaac Sim</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>PX4 Autopilot</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>UAV / MCR Systems</span></li>
+      </ul>
+    </div>
+    <div class="skill-category animate-on-scroll">
+      <h3 class="skill-title"><i class="fas fa-tools"></i> Dev Tools</h3>
+      <ul class="skill-list">
+        <li class="skill-item"><span class="skill-dot"></span> <span>Docker</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>Git / GitHub</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>Linux / Ubuntu</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>CATIA (CAD)</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="https://github.com/Hamidraei23" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/hamidreza-raei/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="https://hamidraei23.github.io/" target="_blank" aria-label="Portfolio"><i class="fas fa-globe"></i></a>
+      <a href="mailto:hamidreza.raei@iit.it" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    </div>
+    <p class="footer-text">&copy; 2025 Hamidreza Raei | Built with <span style="color: var(--accent-green);">❤</span> & Clean Code</p>
+  </div>
+</footer>
+
+<script>
+// Typing Effect
+const phrases = [
+  "PhD Candidate @ Politecnico di Milano",
+  "Marie Skłodowska-Curie Fellow",
+  "Reinforcement Learning for Robotics",
+  "Sim-to-Real Transfer Specialist",
+  "Human-Robot Interaction Researcher"
+];
+const typingEl = document.getElementById('typing-text');
+let phraseIndex = 0, charIndex = 0, isDeleting = false;
+
+function typeEffect() {
+  const current = phrases[phraseIndex];
+  if (isDeleting) {
+    typingEl.textContent = current.substring(0, charIndex - 1);
+    charIndex--;
+  } else {
+    typingEl.textContent = current.substring(0, charIndex + 1);
+    charIndex++;
+  }
+
+  let typeSpeed = isDeleting ? 50 : 100;
+
+  if (!isDeleting && charIndex === current.length) {
+    isDeleting = true;
+    typeSpeed = 2000;
+  } else if (isDeleting && charIndex === 0) {
+    isDeleting = false;
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+    typeSpeed = 500;
+  }
+
+  setTimeout(typeEffect, typeSpeed);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  typeEffect();
+  initCanvas();
+  initScrollAnimations();
+});
+
+// Hacker Grid Canvas Background
+function initCanvas() {
+  const canvas = document.getElementById('grid-canvas');
+  const ctx = canvas.getContext('2d');
+  
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const gridSize = 40;
+  let offset = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x <= canvas.width; x += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, canvas.height);
+      ctx.stroke();
+    }
+
+    for (let y = 0; y <= canvas.height; y += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(0, y + offset % gridSize);
+      ctx.lineTo(canvas.width, y + offset % gridSize);
+      ctx.stroke();
+    }
+
+    // Floating particles
+    ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+    for (let i = 0; i < 15; i++) {
+      const px = (Math.sin(offset * 0.01 + i * 2) * canvas.width / 2) + canvas.width / 2;
+      const py = (Math.cos(offset * 0.015 + i * 3) * canvas.height / 2) + canvas.height / 2;
+      ctx.beginPath();
+      ctx.arc(px, py, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    offset += 0.3;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// Scroll Animations
+function initScrollAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
       }
-      for (var i = 0; i < blog.length; i++) {
-        $("#blogs").append(`
-          <a href="./blog/${blog[i].url_title}/" target="_blank">
-              <section>
-                  <img src="./blog/${blog[i].url_title}/${blog[i].top_image}">
-                  <div class="blog_container">
-                      <div class="section_title">${blog[i].title}</div>
-                      <div class="about_section">
-                          ${blog[i].sub_title}
-                      </div>
-                  </div>
-              </section>
-          </a>
-          `);
-      }
-    }).fail(function() {
-      return (document.getElementById("blog_section").style.display = "none");
     });
-  </script>
+  }, { threshold: 0.1 });
 
-  <script>
-    const magicProjectsGrid = new MagicGrid({
-      container: "#work_section",
-      animate: false,
-      gutter: 30, // default gutter size
-      static: true,
-      useMin: false,
-      maxColumns: 2,
-      useTransform: true
-    });
+  document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+}
 
-    const magicForksGrid = new MagicGrid({
-      container: "#forks_section",
-      animate: false,
-      gutter: 30, // default gutter size
-      static: true,
-      useMin: false,
-      maxColumns: 2,
-      useTransform: true
-    });
+// Smooth Scroll for Nav
+document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
 
-    $("document").ready(() => {
-      magicProjectsGrid.listen();
-      magicForksGrid.listen();
-    });
-  </script>
+</body>
+</html>
 
-
-</body></html>

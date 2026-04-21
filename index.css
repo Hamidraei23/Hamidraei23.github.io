@@ -551,9 +551,9 @@ body {
   background: var(--text-color);
 }
 :root {
-  --bg-color: rgb(94, 94, 94);
+  --bg-color: rgb(216, 202, 202);
   --text-color: #000000;
-  --blog-gray-color: rgb(255, 255, 255);
+  --blog-gray-color: rgb(201, 189, 189);
   --background-image: linear-gradient(
       90deg,
       rgba(110, 110, 110, 0.3),
