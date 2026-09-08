@@ -1,4 +1,4 @@
-# Prepared for web: material references validated.
+# Prepared for web: material references validated; loose CAD lines omitted.
 # Blender v2.79 (sub 0) OBJ File: 'link2.blend'
 # www.blender.org
 mtllib link6.mtl
@@ -23973,7 +23973,6 @@ f 4548/5043/7007 4549/5045/7007 4550/5021/7007
 f 4446/5036/7008 4421/4852/7008 4247/5040/7008
 f 4551/5020/7009 4550/5021/7009 4549/5045/7009
 f 4247/5040/7010 4421/4852/7010 4248/4854/7010
-l 4566 4480
 o node0_Shell012.001
 v -0.000859 0.049607 0.003200
 v -0.000859 0.049497 0.003801

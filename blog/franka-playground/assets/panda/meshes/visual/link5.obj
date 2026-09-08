@@ -1,4 +1,4 @@
-# Prepared for web: material references validated.
+# Prepared for web: material references validated; loose CAD lines omitted.
 # Blender v2.79 (sub 0) OBJ File: ''
 # www.blender.org
 mtllib link5.mtl
@@ -47284,5 +47284,3 @@ f 9497/9982/9457 9501/9986/9461 9496/9983/9458
 f 9498/9981/9456 9501/9986/9461 9500/9985/9460
 f 9499/9984/9459 9498/9981/9456 9500/9985/9460
 f 9496/9983/9458 9501/9986/9461 9498/9981/9456
-l 7694 7706
-l 8896 8895
