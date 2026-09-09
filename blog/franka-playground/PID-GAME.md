@@ -18,12 +18,45 @@ therefore follows an arc while the plate center stays fixed. Joint,
 Cartesian, demo, gripper and saved-trajectory controls cannot drive the arm
 while this tab is active. Leaving the tab restores the previous arm pose.
 
+## Desired targets and live joints
+
+Controlled point mode accepts a click on the plate map or X/Y coordinates
+in millimeters, anywhere from −100 to +100 mm. Center target sets both to
+zero. With the map focused, arrows move the target 1 mm, Shift+arrow 10 mm,
+and Home selects the center. A point can be changed while the game runs.
+
+Drawn trajectory mode accepts a mouse or touch drag on the top-down plate.
+The drawing is shown in purple on both the map and the 3D plate; the cyan
+ring is the desired target and the gold ball is the measured position.
+The duration is adjustable from 0.5 to 120 simulated seconds (default 10).
+Pointer capture allows a drag to finish outside the map; coordinates are
+clamped to the plate. Canceled drawings retain the previous path.
+
+The path is a bounded polyline parameterized by arc length, independent of
+pointer sampling speed. A quintic time law eases the reference to rest at
+both ends. Its tangent supplies the reference velocity; sharp drawn
+corners retain changes in direction. The ball tracks this moving reference
+through the PID and dynamics, rather than being moved directly onto the
+path. Timing or gains that exceed the plant's capabilities can cause
+tracking error or a fall. After the duration, the target holds its last
+point. Pause freezes both physics and path time. Restart path rewinds the
+reference without resetting the ball. Reset and a fall restart the ball,
+robot and path clock, retaining the drawing, duration and gains. Drawing,
+changing mode/duration and clearing a path pause the challenge.
+
+Seven compact joint meters show the actual IK joint angles relative to
+their URDF limits. Their numbers follow the Degrees/Radians selector and
+refresh once per rendered simulation frame, outside the physics substeps.
+
 ## Controller
 
-With x/y in plate coordinates and the center as target:
+With ball position x/y and desired position xd/yd in plate coordinates,
+define ex = x−xd, ey = y−yd, dex = vx−vxd and dey = vy−vyd:
 
-- Pitch command = −(Kp·x + Ki·integral(x) + Kd·vx).
-- Roll command = +(Kp·y + Ki·integral(y) + Kd·vy).
+- Pitch command = −(Kp·ex + Ki·integral(ex) + Kd·dex).
+- Roll command = +(Kp·ey + Ki·integral(ey) + Kd·dey).
+
+The default desired position is the center, with zero desired velocity.
 
 The signs differ because positive pitch accelerates the ball along +X,
 whereas positive roll accelerates it along −Y. Gains use radians, meters
@@ -83,6 +116,7 @@ From the repository root:
 
 ```sh
 node blog/franka-playground/tests/pid-physics.test.mjs
+node blog/franka-playground/tests/pid-targets.test.mjs
 node blog/franka-playground/tests/trajectory.test.mjs
 ```
 
@@ -102,3 +136,6 @@ Playwright installation, and `PLAYWRIGHT_CHROMIUM_EXECUTABLE` selects an existin
 Chromium executable. Test-only inspection hooks are injected into the served
 module; they are not exposed by the application. Desktop/mobile screenshots
 are written to the system temporary directory.
+
+Target drawing, timing, tracking and joint meters are checked by
+`tests/pid-targets.browser.cjs`, using the same browser environment variables.

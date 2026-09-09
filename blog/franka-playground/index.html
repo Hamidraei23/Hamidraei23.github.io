@@ -79,7 +79,20 @@
     .pid-readout output { display:block; color:var(--cyan); }
     #pid-status { font-size:12px; color:var(--cyan); }
     #pid-status[data-error="true"] { color:#ffb2a8; }
-    #pid-map { display:block; width:160px; max-width:100%; margin:12px auto; height:auto; aspect-ratio:1; background:#171e29; border:1px solid var(--line); border-radius:8px; }
+    #pid-map { display:block; width:220px; max-width:100%; margin:12px auto; height:auto; aspect-ratio:1; background:#171e29; border:1px solid var(--line); border-radius:8px; touch-action:none; cursor:crosshair; user-select:none; }
+    .pid-target-option { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:10px 0; font-size:12px; }
+    .pid-target-option select { min-width:0; flex:1; font-size:12px; }
+    .pid-point-inputs { display:flex; gap:8px; font-size:11px; }
+    .pid-point-inputs label { flex:1; min-width:0; }
+    .pid-point-inputs input { width:100%; }
+    #pid-target-help[data-error="true"] { color:#ffb2a8; }
+    #pid-target-position, #pid-target-time { display:block; color:var(--cyan); font:11px/1.7 ui-monospace,monospace; }
+    #pid-joint-bars { display:grid; gap:3px; margin:10px 0 16px; }
+    .pid-joint-bar { display:grid; grid-template-columns:20px 1fr 72px; align-items:center; gap:7px; font:10px/1.4 ui-monospace,monospace; }
+    .pid-joint-bar meter { width:100%; height:10px; }
+    .pid-joint-bar meter::-webkit-meter-optimum-value { background:var(--cyan); }
+    .pid-joint-bar meter::-moz-meter-bar { background:var(--cyan); }
+    .pid-joint-bar output { text-align:right; color:var(--cyan); }
     .sidebar { max-height:770px; overflow-y:auto; scrollbar-width:thin; }
     input[type="range"] { width:100%; height:16px; margin:6px 0 0; accent-color:var(--cyan); cursor:pointer; }
     input[type="checkbox"] { accent-color:var(--cyan); width:15px; height:15px; }
@@ -164,14 +177,28 @@
           </div>
           <div id="pid-panel" role="tabpanel" aria-labelledby="pid-tab" hidden>
             <h2>Balance the ball</h2>
-            <p class="control-help">Tune the two PID controllers to keep the ball at the crosshair. The plate center stays fixed; only roll and pitch change, up to ±25°.</p>
-            <svg id="pid-map" viewBox="-110 -110 220 220" role="img" aria-label="Top view of the ball on the plate, target at the center">
+            <p class="control-help">Track a target point or a drawn trajectory with the ball. The plate center stays fixed; only roll and pitch change, up to ±25°.</p>
+            <label class="pid-target-option" for="pid-target-mode">Desired target <select id="pid-target-mode"><option value="point">Controlled point</option><option value="path">Drawn trajectory</option></select></label>
+            <svg id="pid-map" viewBox="-110 -110 220 220" role="group" tabindex="0" aria-label="Select the desired ball position on the plate" aria-describedby="pid-target-help">
               <rect x="-100" y="-100" width="200" height="200" fill="#24424b" stroke="#71e6e1"/>
               <path d="M-100 0H100 M0 -100V100" stroke="#517480" stroke-dasharray="4 4"/>
-              <circle r="10" fill="none" stroke="#71e6e1"/>
+              <polyline id="pid-map-path" points="" fill="none" stroke="#c0a4ff" stroke-width="1.5" pointer-events="none"/>
+              <circle id="pid-map-target" r="10" fill="none" stroke="#71e6e1" stroke-width="2" pointer-events="none"/>
               <circle id="pid-map-ball" cx="25" cy="20" r="10" fill="#ffca72"/>
               <text x="84" y="-6" fill="#bbc5d4" font-size="10">X</text><text x="6" y="-85" fill="#bbc5d4" font-size="10">Y</text>
             </svg>
+            <div id="pid-point-controls">
+              <div class="pid-point-inputs"><label for="pid-target-x">Target X (mm)<input id="pid-target-x" type="number" min="-100" max="100" step="1" value="0"></label><label for="pid-target-y">Target Y (mm)<input id="pid-target-y" type="number" min="-100" max="100" step="1" value="0"></label></div>
+              <div class="pose-actions"><button id="pid-target-center">Center target</button></div>
+            </div>
+            <div id="pid-path-controls" hidden>
+              <label class="pid-target-option" for="pid-path-duration">Trajectory time (s)<input id="pid-path-duration" type="number" min="0.5" max="120" step="0.5" value="10"></label>
+              <div class="pose-actions"><button id="pid-path-clear">Clear path</button><button id="pid-path-restart">Restart path</button></div>
+            </div>
+            <p id="pid-target-help" class="control-help" role="status">Click the plate or enter X/Y. Choose Center to return to the middle.</p>
+            <output id="pid-target-position" aria-label="Desired target X and Y">0.0 / 0.0 mm</output>
+            <output id="pid-target-time" aria-label="Trajectory elapsed time" hidden>0.0 / 10.0 s</output>
+            <h2>Live joints</h2><div id="pid-joint-bars" aria-label="Seven live joint angles"></div>
             <div class="pid-gains">
               <span></span><span class="gain-heading">Roll · Y error</span><span class="gain-heading">Pitch · X error</span>
               <span>P</span><input id="pid-roll-kp" aria-label="Roll Kp" type="number" min="0" max="100" step="0.1" value="2"><input id="pid-pitch-kp" aria-label="Pitch Kp" type="number" min="0" max="100" step="0.1" value="2">

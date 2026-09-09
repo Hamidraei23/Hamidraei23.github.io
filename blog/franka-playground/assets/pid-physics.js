@@ -60,10 +60,10 @@ export function rollingAcceleration(state, rollAcceleration = 0, pitchAccelerati
     normalForcePerMass: transport[2] - gravity[2], ballOmega, omega };
 }
 
-export function stepPhysics(state, gains, dt = FIXED_DT, acceptTilt = () => true) {
+export function stepPhysics(state, gains, dt = FIXED_DT, acceptTilt = () => true, desired = { x: 0, y: 0, vx: 0, vy: 0 }) {
   if (state.fallen) return false;
-  const r = pid(state.y, state.vy, state.rollIntegral, gains.roll, dt);
-  const p = pid(state.x, state.vx, state.pitchIntegral, gains.pitch, dt);
+  const r = pid(state.y - desired.y, state.vy - desired.vy, state.rollIntegral, gains.roll, dt);
+  const p = pid(state.x - desired.x, state.vx - desired.vx, state.pitchIntegral, gains.pitch, dt);
   const [roll, rollRate, rollAcceleration] = actuator(state.roll, state.rollRate, r.command, dt);
   const [pitch, pitchRate, pitchAcceleration] = actuator(state.pitch, state.pitchRate, -p.command, dt);
   if (!acceptTilt(roll, pitch)) return false;

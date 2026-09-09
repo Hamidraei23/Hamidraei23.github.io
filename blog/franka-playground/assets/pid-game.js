@@ -1,4 +1,5 @@
 import { BALL_RADIUS, PLATE_SIZE, FIXED_DT, DEFAULT_GAINS, initialState, pushBall, stepPhysics, rollingAcceleration } from './pid-physics.js';
+import { setupPIDTargets } from './pid-targets.js';
 
 // Joint 3 is 0.10 rad below the screenshot to provide tilt clearance.
 export const CHALLENGE_JOINTS = [-.437, -1.002, .583, -2.362, -.958, 3.009, .764];
@@ -7,6 +8,25 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
   const { Group, Mesh, BoxGeometry, SphereGeometry, TorusGeometry, MeshStandardMaterial, Vector3, Quaternion, Euler } = three;
   const el = id => document.getElementById(id);
   const joints = CHALLENGE_JOINTS.map((_, i) => robot.joints[`panda_joint${i + 1}`]);
+  const jointBars = joints.map((joint, i) => {
+    const row = document.createElement('div'); row.className = 'pid-joint-bar';
+    const label = document.createElement('span'); label.textContent = `J${i + 1}`;
+    const meter = document.createElement('meter');
+    meter.min = joint.limit.lower; meter.max = joint.limit.upper;
+    meter.setAttribute('aria-label', `Joint ${i + 1} angle`);
+    const value = document.createElement('output');
+    row.append(label, meter, value); el('pid-joint-bars').appendChild(row);
+    return { joint, meter, value };
+  });
+  function updateJointBars() {
+    const radians = el('angle-unit').value === 'radians';
+    for (const { joint, meter, value } of jointBars) {
+      meter.value = joint.angle;
+      value.value = radians ? `${joint.angle.toFixed(3)} rad` : `${(joint.angle*180/Math.PI).toFixed(1)}°`;
+      meter.setAttribute('aria-valuetext', value.value);
+    }
+  }
+  el('angle-unit').addEventListener('change', updateJointBars);
   const solve = createIK(robot, tool, { positionTolerance: .00001, orientationTolerance: .0001 });
   const board = new Group(); board.name = 'PID plate · fixed center'; board.visible = false; scene.add(board);
   const material = color => new MeshStandardMaterial({ color, roughness: .55, metalness: .15 });
@@ -25,6 +45,18 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
   }
   const target = new Mesh(new TorusGeometry(.01, .0006, 6, 40), markings);
   target.position.z = .0006; board.add(target);
+  const pathGroup = new Group(); board.add(pathGroup);
+  const pathGeometry = new BoxGeometry(1, 1, 1), pathMaterial = material('#c0a4ff');
+  function showPath(points) {
+    pathGroup.clear();
+    for (let i = 1; i < points.length; i++) {
+      const a = points[i-1], b = points[i];
+      const segment = new Mesh(pathGeometry, pathMaterial);
+      segment.scale.set(Math.hypot(b.x-a.x, b.y-a.y), .001, .0002);
+      segment.position.set((a.x+b.x)/2, (a.y+b.y)/2, .0008);
+      segment.rotation.z = Math.atan2(b.y-a.y, b.x-a.x); pathGroup.add(segment);
+    }
+  }
   const ball = new Mesh(new SphereGeometry(BALL_RADIUS, 32, 24), material('#ffc568'));
   ball.castShadow = true; board.add(ball);
   const stripeMaterial = material('#62411d');
@@ -34,6 +66,12 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
   }
   let active = false, running = false, accumulator = 0, falls = 0, beforeGame = null;
   let state = initialState(), gains = structuredClone(DEFAULT_GAINS), currentTab = 'joint';
+  let targetTime = 0;
+  const targets = setupPIDTargets({ onPathChange: showPath, onChange: ({ pause }) => {
+    targetTime = 0; accumulator = 0; state.rollIntegral = 0; state.pitchIntegral = 0;
+    if (pause) running = false;
+    if (active) { updateView(); status(pause ? 'Target updated. Start the challenge when ready.' : 'Target point updated.'); }
+  } });
   const pivot = new Vector3(), graspOffset = new Vector3(), graspRotation = new Quaternion();
   let yaw = 0;
   const disabledBefore = new Map();
@@ -60,6 +98,9 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
     return solve(position, orientation).success;
   }
   function updateView() {
+    const desired = targets.render(targetTime);
+    target.position.set(desired.x, desired.y, .0006);
+    updateJointBars();
     board.position.copy(pivot); board.quaternion.copy(plateQuaternion(state.roll, state.pitch));
     ball.position.set(state.x, state.y, BALL_RADIUS);
     el('pid-map-ball').setAttribute('cx', state.x * 1000);
@@ -72,6 +113,7 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
     el('motion-state').textContent = running ? (state.saturated ? '● PID game · tilt limit' : '● PID game running') : '● PID game paused';
   }
   function reset(message = 'Challenge reset. Your PID gains are unchanged.') {
+    targets.cancelDrawing(); targetTime = 0;
     state = initialState(); accumulator = 0; ball.quaternion.identity();
     applyJoints(CHALLENGE_JOINTS);
     updateView(); syncRobot(); status(message);
@@ -97,6 +139,7 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
     reset('Start the challenge or give the ball a push.');
   }
   function leave() {
+    targets.cancelDrawing();
     running = false; active = false; accumulator = 0; board.visible = false;
     el('position-label').textContent = 'FINGERTIP POINT · BASE FRAME';
     applyJoints(beforeGame.joints, beforeGame.opening);
@@ -150,8 +193,9 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
     if (readGains()) { state.rollIntegral = 0; state.pitchIntegral = 0; status('PID gains updated.'); }
   });
   el('pid-start').addEventListener('click', () => {
-    if (!active || !readGains()) return;
-    running = !running; accumulator = 0; updateView(); status(running ? 'Balance the ball at the center.' : 'Challenge paused.');
+    if (!active) return;
+    if (!running && (!readGains() || !targets.validate())) return;
+    running = !running; accumulator = 0; updateView(); status(running ? 'Track the desired target on the plate.' : 'Challenge paused.');
   });
   el('pid-reset').addEventListener('click', () => { if (active) reset(); });
   el('pid-push-speed').addEventListener('input', () => {
@@ -160,7 +204,7 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
     el('pid-push').textContent = `Random push · ${speed} m/s`;
   });
   el('pid-push').addEventListener('click', () => {
-    if (!active || !readGains()) return;
+    if (!active || !readGains() || !targets.validate()) return;
     const speed = el('pid-push-speed').valueAsNumber;
     pushBall(state, Math.random() * Math.PI * 2, speed);
     running = true; updateView(); status(`Added a random ${speed.toFixed(2)} m/s velocity push.`);
@@ -169,11 +213,12 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
     if (!active || !running) return;
     accumulator += Math.min(Math.max(dt, 0), .05);
     while (accumulator >= FIXED_DT) {
-      if (!stepPhysics(state, gains, FIXED_DT, acceptTilt)) {
+      if (!stepPhysics(state, gains, FIXED_DT, acceptTilt, targets.sample(targetTime))) {
         running = false; accumulator = 0;
         status('Robot tilt could not be reached. Reset the challenge to continue.', true); break;
       }
       accumulator -= FIXED_DT;
+      targetTime += FIXED_DT;
       const { ballOmega, omega } = rollingAcceleration(state);
       const rotation = new Vector3(...ballOmega.map((value, i) => value - omega[i]));
       const speed = rotation.length();
