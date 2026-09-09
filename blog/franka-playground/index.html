@@ -99,21 +99,28 @@
       </section>
       <aside class="sidebar" aria-label="Robot controls">
         <fieldset id="robot-controls" disabled>
-          <div class="panel-heading"><h2>Robot controls</h2><select id="angle-unit" aria-label="Joint angle units"><option value="degrees">Degrees °</option><option value="radians">Radians</option></select></div>
+          <div class="panel-heading"><h2>Robot controls</h2><select id="angle-unit" aria-label="Angle units"><option value="degrees">Degrees °</option><option value="radians">Radians</option></select></div>
           <div class="preset-row"><button id="home">↺ Home pose</button><button id="demo" aria-pressed="false">▷ Play demo</button></div>
           <div class="control-tabs" role="tablist" aria-label="Control mode"><button id="joint-tab" role="tab" aria-controls="joint-panel" aria-selected="true">Joints</button><button id="cartesian-tab" role="tab" aria-controls="cartesian-panel" aria-selected="false" tabindex="-1">Cartesian EE</button></div>
           <div id="joint-panel" role="tabpanel" aria-labelledby="joint-tab"><div id="joints"></div></div>
           <div id="cartesian-panel" role="tabpanel" aria-labelledby="cartesian-tab" hidden>
             <h2>End-effector target</h2>
-            <p class="control-help">XYZ in metres, relative to the robot base. Drag the arrows at the gripper, jog an axis, or enter a target.</p>
+            <p class="control-help">Pose of the fingertip point, midway between the finger tips, in the robot base frame. Roll, pitch and yaw turn about that point. Drag the gizmo at the gripper, jog an axis, or enter a target.</p>
             <div class="cart-row"><label for="target-x">X (m)</label><button data-jog="x:-1" aria-label="Decrease X">−</button><input id="target-x" type="number" step="0.001"><button data-jog="x:1" aria-label="Increase X">+</button></div>
             <div class="cart-row"><label for="target-y">Y (m)</label><button data-jog="y:-1" aria-label="Decrease Y">−</button><input id="target-y" type="number" step="0.001"><button data-jog="y:1" aria-label="Increase Y">+</button></div>
             <div class="cart-row"><label for="target-z">Z (m)</label><button data-jog="z:-1" aria-label="Decrease Z">−</button><input id="target-z" type="number" step="0.001"><button data-jog="z:1" aria-label="Increase Z">+</button></div>
             <label class="cart-option" for="jog-step">Jog step <select id="jog-step"><option value="0.001">1 mm</option><option value="0.01" selected>1 cm</option><option value="0.05">5 cm</option></select></label>
+            <hr class="divider">
+            <div class="cart-row"><label for="target-roll">Roll <span data-angle-unit>&deg;</span></label><button data-rot="x:-1" aria-label="Decrease roll">&minus;</button><input id="target-roll" type="number" step="any"><button data-rot="x:1" aria-label="Increase roll">+</button></div>
+            <div class="cart-row"><label for="target-pitch">Pitch <span data-angle-unit>&deg;</span></label><button data-rot="y:-1" aria-label="Decrease pitch">&minus;</button><input id="target-pitch" type="number" step="any"><button data-rot="y:1" aria-label="Increase pitch">+</button></div>
+            <div class="cart-row"><label for="target-yaw">Yaw <span data-angle-unit>&deg;</span></label><button data-rot="z:-1" aria-label="Decrease yaw">&minus;</button><input id="target-yaw" type="number" step="any"><button data-rot="z:1" aria-label="Increase yaw">+</button></div>
+            <label class="cart-option" for="rot-step">Rotate step <select id="rot-step"><option value="1">1&deg;</option><option value="5" selected>5&deg;</option><option value="15">15&deg;</option></select></label>
+            <hr class="divider">
             <label class="cart-option"><input id="lock-orientation" type="checkbox" checked>Keep gripper orientation</label>
             <label class="cart-option"><input id="drag-ee" type="checkbox" checked>Show EE drag controls</label>
+            <label class="cart-option" for="drag-mode">Drag mode <select id="drag-mode"><option value="translate">Move (G)</option><option value="rotate">Rotate (R)</option></select></label>
             <div class="preset-row"><button id="apply-target">Move to target</button><button id="sync-target">Use current EE</button></div>
-            <p id="ik-status" role="status" aria-live="polite">Target follows the current end effector.</p>
+            <p id="ik-status" role="status" aria-live="polite">Target follows the current fingertip point.</p>
             <p class="control-help">Kinematics only; no collision checking. If a target cannot be solved, the arm stays at its last valid pose.</p>
           </div>
           <hr class="divider">
@@ -124,7 +131,7 @@
         </fieldset>
       </aside>
     </div>
-    <div class="readout"><span class="label">TOOL POSITION · BASE FRAME</span><output id="tool-position">X — &nbsp; Y — &nbsp; Z —</output><span class="state" id="motion-state">● Preparing scene</span></div>
+    <div class="readout"><span class="label">FINGERTIP POINT · BASE FRAME</span><output id="tool-position">X — &nbsp; Y — &nbsp; Z —</output><span class="state" id="motion-state">● Preparing scene</span></div>
     <div class="notes"><div><h3>A little closer to the research</h3><p>This Panda model comes from the Genesis repository. Its starting pose follows the parallel Franka environment used in the project.</p></div><div><h3>Make it move</h3><p>Use the sliders to explore each joint, or play a gentle motion demo. This is a kinematic viewer; poses are not checked for collisions.</p></div><div><h3>Made for the browser</h3><p>The robot, materials, and textures load locally. No ROS, simulator, or connection to a physical robot is needed.</p></div></div>
     <footer><span>Hamidreza Raei · Robotics & interaction</span><span><a href="assets/panda/LICENSE.txt">Model license</a> · <a href="assets/vendor/THREE-LICENSE.txt">Three.js license</a> · <a href="assets/vendor/URDF-LOADER-NOTICE.md">URDF loader attribution</a></span></footer>
   </main>
