@@ -16,11 +16,11 @@ export function initialState() {
     time: 0, fallen: false, saturated: false };
 }
 
-export function pushBall(state, angle) {
-  // A velocity impulse of exactly 0.1 m/s in a random direction on the plate.
+export function pushBall(state, angle, speed = PUSH_SPEED) {
+  // A velocity impulse of the selected magnitude in a random plate direction.
   // The rolling constraint supplies the corresponding change in angular velocity.
-  state.vx += PUSH_SPEED * Math.cos(angle);
-  state.vy += PUSH_SPEED * Math.sin(angle);
+  state.vx += speed * Math.cos(angle);
+  state.vy += speed * Math.sin(angle);
 }
 
 function pid(position, velocity, integral, gains, dt) {

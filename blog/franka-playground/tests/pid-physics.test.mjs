@@ -36,10 +36,10 @@ test('plate angular acceleration affects the ball even at the center',()=>{
   close(a.ax,-2*BALL_RADIUS);close(a.ay,BALL_RADIUS);
 });
 
-test('push adds exactly 0.1 m/s for every direction and preserves existing velocity',()=>{
-  for(let i=0;i<32;i++){
-    const s={...initialState(),vx:.03,vy:-.04};pushBall(s,i*Math.PI/16);
-    close(Math.hypot(s.vx-.03,s.vy+.04),.1);
+test('push adds the selected speed for every direction and preserves existing velocity',()=>{
+  for(const speed of [.1,.2,.3,.4]) for(let i=0;i<32;i++){
+    const s={...initialState(),vx:.03,vy:-.04};pushBall(s,i*Math.PI/16,speed);
+    close(Math.hypot(s.vx-.03,s.vy+.04),speed);
   }
 });
 

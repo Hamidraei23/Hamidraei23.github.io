@@ -154,10 +154,16 @@ export function setupPIDGame({ robot, tool, scene, three, createIK, cartesian, t
     running = !running; accumulator = 0; updateView(); status(running ? 'Balance the ball at the center.' : 'Challenge paused.');
   });
   el('pid-reset').addEventListener('click', () => { if (active) reset(); });
+  el('pid-push-speed').addEventListener('input', () => {
+    const speed = el('pid-push-speed').valueAsNumber.toFixed(2);
+    el('pid-push-speed-value').value = `${speed} m/s`;
+    el('pid-push').textContent = `Random push · ${speed} m/s`;
+  });
   el('pid-push').addEventListener('click', () => {
     if (!active || !readGains()) return;
-    pushBall(state, Math.random() * Math.PI * 2);
-    running = true; updateView(); status('Added a random 0.1 m/s velocity push.');
+    const speed = el('pid-push-speed').valueAsNumber;
+    pushBall(state, Math.random() * Math.PI * 2, speed);
+    running = true; updateView(); status(`Added a random ${speed.toFixed(2)} m/s velocity push.`);
   });
   function tick(dt) {
     if (!active || !running) return;

@@ -34,8 +34,9 @@ A critically damped angular servo (18 rad/s natural frequency), limited
 to 0.8 rad/s and 4 rad/s², turns angle commands into continuous plate
 motion. This servo is an ideal actuator model, not simulated robot motor
 torques. Changing gains clears the integrals. A random push adds a planar
-velocity vector of magnitude exactly 0.1 m/s to the ball's existing
-velocity; it also respects the rolling angular-velocity constraint.
+velocity vector at the selected push speed (0.1–0.4 m/s, in 0.01 m/s steps;
+default 0.1 m/s) to the ball's existing velocity. The direction remains random,
+and the push respects the rolling angular-velocity constraint.
 
 ## Rolling dynamics
 
