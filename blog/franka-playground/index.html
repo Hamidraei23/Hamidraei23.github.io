@@ -9,6 +9,7 @@
   <style>
     :root { color-scheme: dark; --bg:#171a23; --panel:#202430; --line:#363d4b; --text:#e8edf3; --muted:#a1adbd; --cyan:#71e6e1; }
     * { box-sizing:border-box; }
+    [hidden] { display:none !important; }
     body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 system-ui,sans-serif; }
     a { color:var(--cyan); text-decoration:none; }
     a:hover { text-decoration:underline; }
@@ -54,7 +55,7 @@
     input[type="number"] { min-width:0; width:90px; color:var(--text); background:#171e29; border:1px solid var(--line); border-radius:5px; padding:5px 6px; font:11px ui-monospace,monospace; }
     #angle-unit { font-size:11px; padding:4px 7px; }
     .control-tabs { display:flex; gap:8px; margin-bottom:18px; }
-    .control-tabs button { flex:1; font-size:12px; }
+    .control-tabs button { flex:1; font-size:12px; padding:7px 5px; }
     .control-tabs [aria-selected="true"] { color:var(--cyan); border-color:var(--cyan); }
     .control-help, #ik-status { font-size:11px; color:var(--muted); margin:10px 0; }
     #ik-status[data-error="true"] { color:#ffb2a8; }
@@ -71,6 +72,14 @@
     #trajectory-status, #pose-storage-status { font-size:11px; color:var(--muted); }
     #trajectory-status[data-error="true"] { color:#ffb2a8; }
     button:disabled { cursor:default; }
+    .pid-gains { display:grid; grid-template-columns:25px 1fr 1fr; gap:8px; align-items:center; margin:16px 0; font-size:12px; }
+    .pid-gains input { width:100%; }
+    .pid-gains .gain-heading { color:var(--cyan); }
+    .pid-readout { display:grid; grid-template-columns:1fr 1fr; gap:8px; font:11px/1.7 ui-monospace,monospace; margin:14px 0; }
+    .pid-readout output { display:block; color:var(--cyan); }
+    #pid-status { font-size:12px; color:var(--cyan); }
+    #pid-status[data-error="true"] { color:#ffb2a8; }
+    #pid-map { display:block; width:160px; max-width:100%; margin:12px auto; height:auto; aspect-ratio:1; background:#171e29; border:1px solid var(--line); border-radius:8px; }
     .sidebar { max-height:770px; overflow-y:auto; scrollbar-width:thin; }
     input[type="range"] { width:100%; height:16px; margin:6px 0 0; accent-color:var(--cyan); cursor:pointer; }
     input[type="checkbox"] { accent-color:var(--cyan); width:15px; height:15px; }
@@ -109,7 +118,7 @@
         <fieldset id="robot-controls" disabled>
           <div class="panel-heading"><h2>Robot controls</h2><select id="angle-unit" aria-label="Angle units"><option value="degrees">Degrees °</option><option value="radians">Radians</option></select></div>
           <div class="preset-row"><button id="home">↺ Home pose</button><button id="demo" aria-pressed="false">▷ Play demo</button></div>
-          <div class="control-tabs" role="tablist" aria-label="Control mode"><button id="joint-tab" role="tab" aria-controls="joint-panel" aria-selected="true">Joints</button><button id="cartesian-tab" role="tab" aria-controls="cartesian-panel" aria-selected="false" tabindex="-1">Cartesian EE</button></div>
+          <div class="control-tabs" role="tablist" aria-label="Control mode"><button id="joint-tab" role="tab" aria-controls="joint-panel" aria-selected="true">Joints</button><button id="cartesian-tab" role="tab" aria-controls="cartesian-panel" aria-selected="false" tabindex="-1">Cartesian EE</button><button id="pid-tab" role="tab" aria-controls="pid-panel" aria-selected="false" tabindex="-1">PID game</button></div>
           <div id="joint-panel" role="tabpanel" aria-labelledby="joint-tab"><div id="joints"></div></div>
           <div id="cartesian-panel" role="tabpanel" aria-labelledby="cartesian-tab" hidden>
             <h2>End-effector target</h2>
@@ -132,7 +141,7 @@
             <p class="control-help">Kinematics only; no collision checking. If a target cannot be solved, the arm stays at its last valid pose.</p>
           </div>
           <hr class="divider">
-          <div class="joint"><label for="gripper">Gripper opening <output id="gripper-value" for="gripper">16.2 mm</output></label><input id="gripper" type="range" min="0" max="80" value="16.18" step="0.1"></div>
+          <div id="shared-pose-controls"><div class="joint"><label for="gripper">Gripper opening <output id="gripper-value" for="gripper">16.2 mm</output></label><input id="gripper" type="range" min="0" max="80" value="16.18" step="0.1"></div>
           <hr class="divider">
           <section class="pose-planner" aria-labelledby="poses-heading">
             <h2 id="poses-heading">Saved poses &amp; trajectories</h2>
@@ -152,13 +161,38 @@
             <p class="control-help">Straight fingertip paths are checked before moving and may use a different arm configuration. Kinematics only; no collision checking.</p>
           </section>
           <hr class="divider">
+          </div>
+          <div id="pid-panel" role="tabpanel" aria-labelledby="pid-tab" hidden>
+            <h2>Balance the ball</h2>
+            <p class="control-help">Tune the two PID controllers to keep the ball at the crosshair. The plate center stays fixed; only roll and pitch change, up to ±25°.</p>
+            <svg id="pid-map" viewBox="-110 -110 220 220" role="img" aria-label="Top view of the ball on the plate, target at the center">
+              <rect x="-100" y="-100" width="200" height="200" fill="#24424b" stroke="#71e6e1"/>
+              <path d="M-100 0H100 M0 -100V100" stroke="#517480" stroke-dasharray="4 4"/>
+              <circle r="10" fill="none" stroke="#71e6e1"/>
+              <circle id="pid-map-ball" cx="25" cy="20" r="10" fill="#ffca72"/>
+              <text x="84" y="-6" fill="#bbc5d4" font-size="10">X</text><text x="6" y="-85" fill="#bbc5d4" font-size="10">Y</text>
+            </svg>
+            <div class="pid-gains">
+              <span></span><span class="gain-heading">Roll · Y error</span><span class="gain-heading">Pitch · X error</span>
+              <span>P</span><input id="pid-roll-kp" aria-label="Roll Kp" type="number" min="0" max="100" step="0.1" value="2"><input id="pid-pitch-kp" aria-label="Pitch Kp" type="number" min="0" max="100" step="0.1" value="2">
+              <span>I</span><input id="pid-roll-ki" aria-label="Roll Ki" type="number" min="0" max="100" step="0.1" value="0.1"><input id="pid-pitch-ki" aria-label="Pitch Ki" type="number" min="0" max="100" step="0.1" value="0.1">
+              <span>D</span><input id="pid-roll-kd" aria-label="Roll Kd" type="number" min="0" max="100" step="0.1" value="0.6"><input id="pid-pitch-kd" aria-label="Pitch Kd" type="number" min="0" max="100" step="0.1" value="0.6">
+            </div>
+            <details class="control-help"><summary>Gain units &amp; signs</summary>Use meters, seconds and radians: P [rad/m], I [rad/(m·s)], D [rad·s/m]. Positive gains drive the ball toward the center. Edit gains while running.</details>
+            <div class="pose-actions"><button id="pid-start">Start challenge</button><button id="pid-reset">Reset</button></div>
+            <div class="pose-actions"><button id="pid-push">Random push · 0.1 m/s</button></div>
+            <div class="pid-readout"><span>Roll / pitch<output id="pid-tilt">0.0° / 0.0°</output></span><span>Ball X / Y<output id="pid-position">25 / −20 mm</output></span><span>Speed<output id="pid-speed">0.000 m/s</output></span><span>Run / falls<output id="pid-score">0.0 s / 0</output></span></div>
+            <p id="pid-status" role="status" aria-live="polite">Start the challenge or give the ball a push.</p>
+            <p class="control-help">20 × 20 cm plate · 1 cm ball radius · gravity 9.81 m/s². Solid ball rolling without slipping. A fall resets the robot, plate and ball; your gains stay the same.</p>
+            <hr class="divider">
+          </div>
           <h2>Scene settings</h2>
           <div class="toggles"><label><input id="grid" type="checkbox" checked>Floor grid</label><label><input id="axes" type="checkbox">Base axes</label><label><input id="wireframe" type="checkbox">Wireframe</label><label><input id="rotate" type="checkbox">Auto-orbit</label></div>
         </fieldset>
       </aside>
     </div>
-    <div class="readout"><span class="label">FINGERTIP POINT · BASE FRAME</span><output id="tool-position">X — &nbsp; Y — &nbsp; Z —</output><span class="state" id="motion-state">● Preparing scene</span></div>
-    <div class="notes"><div><h3>A little closer to the research</h3><p>This Panda model comes from the Genesis repository. Its starting pose follows the parallel Franka environment used in the project.</p></div><div><h3>Make it move</h3><p>Use the sliders to explore each joint, or play a gentle motion demo. This is a kinematic viewer; poses are not checked for collisions.</p></div><div><h3>Made for the browser</h3><p>The robot, materials, and textures load locally. No ROS, simulator, or connection to a physical robot is needed.</p></div></div>
+    <div class="readout"><span id="position-label" class="label">FINGERTIP POINT · BASE FRAME</span><output id="tool-position">X — &nbsp; Y — &nbsp; Z —</output><span class="state" id="motion-state">● Preparing scene</span></div>
+    <div class="notes"><div><h3>A little closer to the research</h3><p>This Panda model comes from the Genesis repository. Its starting pose follows the parallel Franka environment used in the project.</p></div><div><h3>Make it move</h3><p>Explore joints, play saved trajectories, or tune the PID game to balance a rolling ball. Robot poses are not checked for collisions.</p></div><div><h3>Made for the browser</h3><p>The robot, materials, and textures load locally. No ROS, simulator, or connection to a physical robot is needed.</p></div></div>
     <footer><span>Hamidreza Raei · Robotics & interaction</span><span><a href="assets/panda/LICENSE.txt">Model license</a> · <a href="assets/vendor/THREE-LICENSE.txt">Three.js license</a> · <a href="assets/vendor/URDF-LOADER-NOTICE.md">URDF loader attribution</a></span></footer>
   </main>
   <noscript>This interactive robot viewer requires JavaScript. Enable it and reload this page.</noscript>
