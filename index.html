@@ -489,6 +489,7 @@ section {
 }
 
 .project-icon {
+  flex-shrink: 0;
   width: 50px;
   height: 50px;
   border-radius: 12px;
@@ -501,10 +502,18 @@ section {
   color: var(--accent-cyan);
 }
 
+.project-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
 .project-status {
   margin-left: auto;
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  border-radius: 12px;
+  text-align: center;
+  text-wrap: balance;
+  line-height: 1.4;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
   background: rgba(0, 255, 136, 0.15);
@@ -640,7 +649,7 @@ section {
 }
 
 .video-caption .project-link {
-  display: inline-flex;
+  display: inline-block;
   margin-top: 0.75rem;
 }
 
@@ -731,6 +740,23 @@ section {
 .skill-item span {
   color: var(--text-secondary);
   font-size: 0.95rem;
+}
+
+.skill-logos {
+  margin-left: auto;
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* light tiles so dark logos (GitHub, PX4, Tux) stay visible on the dark card */
+.skill-logos img {
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+  border-radius: 6px;
+  background: #e4e4ea;
+  object-fit: contain;
 }
 
 /* Experience Timeline */
@@ -831,11 +857,27 @@ section {
 }
 
 .event-body {
+  position: relative;
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   flex: 1;
+}
+
+/* organiser logo, overlapping the photo's bottom-right corner */
+.event-logo {
+  position: absolute;
+  top: -32px;
+  right: 1rem;
+  height: 46px;
+  width: auto;
+  max-width: 132px;
+  padding: 5px 7px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  object-fit: contain;
 }
 
 .event-meta {
@@ -986,10 +1028,20 @@ section {
 .map-tooltip.home { border-left-color: #3b78f0; }
 
 .map-tooltip strong {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--text-primary);
   font-size: 0.95rem;
   margin-bottom: 0.4rem;
+}
+
+.map-flag {
+  width: 24px;
+  height: 18px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 .map-tooltip ul {
@@ -1330,7 +1382,7 @@ footer {
       </a>
       <div class="project-header">
         <div class="project-icon"><i class="fas fa-shirt"></i></div>
-        <span class="project-status">RA-L 2026</span>
+        <span class="project-status">IEEE Robotics and Automation Letters (RA-L) 2026</span>
       </div>
       <div class="project-body">
         <h3 class="project-title">MonoFold: Monocular Sim-to-Real Manipulation of Deformable Sheets</h3>
@@ -1379,7 +1431,7 @@ footer {
       </a>
       <div class="project-header">
         <div class="project-icon"><i class="fas fa-hand-rock"></i></div>
-        <span class="project-status">RA-L 2025</span>
+        <span class="project-status">IEEE Robotics and Automation Letters (RA-L) 2025</span>
       </div>
       <div class="project-body">
         <h3 class="project-title">RL Approach to Non-Prehensile Manipulation Through Sliding</h3>
@@ -1394,6 +1446,62 @@ footer {
       <div class="project-footer">
         <span class="project-venue"><i class="fas fa-users"></i> Co-authors: Raei, De Momi, Ajoudani</span>
         <a href="https://doi.org/10.1109/LRA.2025.3578238" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="project-card animate-on-scroll">
+      <a class="project-media" href="pics_io/touchscreen_teleoperation.png" target="_blank" rel="noopener">
+        <img src="pics_io/touchscreen_teleoperation.png" alt="Operator drawing a path on a touchscreen camera view while a robot arm traces it on the remote surface" loading="lazy">
+      </a>
+      <div class="project-header">
+        <div class="project-icon"><i class="fas fa-hand-pointer"></i></div>
+        <span class="project-status">RO-MAN 2026</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Design and Evaluation of a Touchscreen-Based Teleoperation Interface for Robotic Manipulators</h3>
+        <p class="project-desc">Touchscreen interface that maps continuous finger motion on a live camera view to manipulator motion for remote surface-contact tasks such as nuclear swab sampling. In a 20-participant study on a Franka Emika Panda, it cut median completion time by 53.5% vs. a joystick (2.50 vs. 5.38 min) and lowered NASA-TLX workload.</p>
+        <div class="project-tags">
+          <span class="tag">Teleoperation</span>
+          <span class="tag">HRI</span>
+          <span class="tag">Touchscreen Interface</span>
+          <span class="tag">User Study</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-users"></i> Co-first authors: García Cárdenas*, Kenan*, Raei* · Bremner, Giuliani, Ajoudani, Tapus</span>
+        <a href="https://ieeexplore.ieee.org/abstract/document/11714783" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="project-card animate-on-scroll">
+      <a class="project-media" href="pics_io/npp_inspection_maps.png" target="_blank" rel="noopener">
+        <img src="pics_io/npp_inspection_maps.png" alt="Three 3D LiDAR maps of the nuclear power plant built by the robots" loading="lazy">
+      </a>
+      <div class="project-header">
+        <div class="project-icon">
+          <!-- quadcopter (Font Awesome's drone icon is Pro-only) -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+            <path d="M5.5 5.5 18.5 18.5M18.5 5.5 5.5 18.5" stroke-width="2.2"/>
+            <circle cx="5" cy="5" r="3.8"/><circle cx="19" cy="5" r="3.8"/><circle cx="5" cy="19" r="3.8"/><circle cx="19" cy="19" r="3.8"/>
+            <path d="M2.6 5h4.8M16.6 5h4.8M2.6 19h4.8M16.6 19h4.8" stroke-width="1.4"/>
+            <rect x="8.75" y="8.75" width="6.5" height="6.5" rx="1.6" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <span class="project-status">SSRR 2025</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Low-Cost Rapid-Development Air-Ground Robotic Solution for Nuclear Power Plant Inspection</h3>
+        <p class="project-desc">Aerial–ground robot team (3D-printed drone and Ackermann-steered ground vehicle with LiDAR, IMU and radiation sensors) built in three weeks with ROS2 and off-the-shelf parts for EnRicH 2025 at the Zwentendorf nuclear power plant. Field trials showed reliable SLAM without GNSS, mesh-network communication through heavy shielding, and real-time radiation monitoring.</p>
+        <div class="project-tags">
+          <span class="tag">Air-Ground Robots</span>
+          <span class="tag">SLAM</span>
+          <span class="tag">ROS2</span>
+          <span class="tag">Nuclear Inspection</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-users"></i> Co-authors: Tian, Kuruppu Arachchige, Li, García Cárdenas, Raei, Dincer, Kenan et al.</span>
+        <a href="https://ieeexplore.ieee.org/abstract/document/11391258" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
 
@@ -1488,7 +1596,7 @@ footer {
     <div class="video-caption">
       <h3>Non-Prehensile Manipulation Through Sliding</h3>
       <p>Hardware transfer of the learned sliding policy on a Franka Emika Panda, followed by friction correction: DDPG alone vs. DDPG with LSTM-based and analytical friction estimates.</p>
-      <a href="https://doi.org/10.1109/LRA.2025.3578238" class="project-link" target="_blank" rel="noopener">RA-L 2025 · View Paper <i class="fas fa-arrow-right"></i></a>
+      <a href="https://doi.org/10.1109/LRA.2025.3578238" class="project-link" target="_blank" rel="noopener">IEEE Robotics and Automation Letters (RA-L) 2025 · View Paper <i class="fas fa-arrow-right"></i></a>
     </div>
   </div>
 </section>
@@ -1531,6 +1639,7 @@ footer {
         <img src="pics_io/events/zju-2026.jpg" alt="Program participants in front of the Zhejiang University gate" loading="lazy" style="object-position: 50% 100%">
       </a>
       <div class="event-body">
+        <img class="event-logo" src="pics_io/events/logos/zju.svg" alt="Zhejiang University logo" title="Zhejiang University" loading="lazy">
         <div class="event-meta"><span>Jul 2026</span><span class="event-place"><i class="fas fa-location-dot"></i> Hangzhou, China</span></div>
         <h4 class="event-title">Global Innovation Practice Program: Industrial AI &amp; Robotics</h4>
         <p class="event-org">Zhejiang University</p>
@@ -1546,6 +1655,7 @@ footer {
         <img src="pics_io/events/enrich-2025.jpg" alt="Team RAICAM with their robots next to the ENRICH 2025 hackathon banner" loading="lazy">
       </a>
       <div class="event-body">
+        <img class="event-logo" src="pics_io/events/logos/enrich.svg" alt="ENRICH – The European Robotics Hackathon logo" title="ENRICH – The European Robotics Hackathon" loading="lazy">
         <div class="event-meta"><span>Jun 2025</span><span class="event-place"><i class="fas fa-location-dot"></i> Vienna, Austria</span></div>
         <h4 class="event-title">ENRICH 2025 Robotics Hackathon</h4>
         <p class="event-org">Team RAICAM</p>
@@ -1561,6 +1671,7 @@ footer {
         <img src="pics_io/events/ensta-paris-2024.jpg" alt="RAICAM bootcamp group photo in the snow at ENSTA Paris" loading="lazy" style="object-position: 50% 100%">
       </a>
       <div class="event-body">
+        <img class="event-logo" src="pics_io/events/logos/ensta-paris.png" alt="ENSTA Paris logo" title="ENSTA Paris" loading="lazy">
         <div class="event-meta"><span>Nov 2024</span><span class="event-place"><i class="fas fa-location-dot"></i> Paris, France</span></div>
         <h4 class="event-title">Multi-Robot Mapping, Autonomous Navigation &amp; Coordinated Valve Closure</h4>
         <p class="event-org">RAICAM @ ENSTA Paris</p>
@@ -1576,6 +1687,7 @@ footer {
         <img src="pics_io/events/genova-2024.jpg" alt="RAICAM network group photo in front of the RAICAM presentation in Genova" loading="lazy" style="object-position: 50% 85%">
       </a>
       <div class="event-body">
+        <img class="event-logo" src="pics_io/events/logos/iit.png" alt="Istituto Italiano di Tecnologia (IIT) logo" title="Istituto Italiano di Tecnologia (IIT)" loading="lazy">
         <div class="event-meta"><span>Mar 2024</span><span class="event-place"><i class="fas fa-location-dot"></i> Genova, Italy</span></div>
         <h4 class="event-title">Multi-Robot Autonomous Navigation &amp; Teleoperated Inspection with Cobots</h4>
         <p class="event-org">RAICAM</p>
@@ -1591,6 +1703,7 @@ footer {
         <img src="pics_io/events/robothon-2023.jpg" alt="Robot gripper above the Robothon 2023 task board" loading="lazy" style="object-position: 50% 65%">
       </a>
       <div class="event-body">
+        <img class="event-logo" src="pics_io/events/logos/robothon.png" alt="Robothon® – The Grand Challenge logo" title="Robothon® – The Grand Challenge" loading="lazy">
         <div class="event-meta"><span>Mar 2023</span><span class="event-place"><i class="fas fa-location-dot"></i> Munich, Germany</span></div>
         <h4 class="event-title">Robothon® – The Grand Challenge 2023</h4>
         <p class="event-org">Team Upcyclers · Ranked 4th of 20 teams</p>
@@ -1615,7 +1728,7 @@ footer {
     </div>
     <div class="map-footer">
       <div class="map-legend">
-        <span><i class="legend-swatch home"></i> Studied &amp; worked (MSc · PhD)</span>
+        <span><i class="legend-swatch home"></i> Studied &amp; worked</span>
         <span><i class="legend-swatch visit"></i> Conferences, schools &amp; research stays</span>
         <span class="map-hint">hover a country · click a chip to zoom</span>
       </div>
@@ -1635,28 +1748,27 @@ footer {
     <div class="skill-category animate-on-scroll">
       <h3 class="skill-title"><i class="fas fa-code"></i> Programming</h3>
       <ul class="skill-list">
-        <li class="skill-item"><span class="skill-dot"></span> <span>Python (TensorFlow, PyTorch, OpenCV)</span></li>
-        <li class="skill-item"><span class="skill-dot"></span> <span>C++ (ROS2, Real-time systems)</span></li>
-        <li class="skill-item"><span class="skill-dot"></span> <span>MATLAB & Simulink</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>Python (TensorFlow, PyTorch, OpenCV)</span> <span class="skill-logos"><img src="pics_io/skills/python.svg" alt="" title="Python" loading="lazy"><img src="pics_io/skills/tensorflow.svg" alt="" title="TensorFlow" loading="lazy"><img src="pics_io/skills/pytorch.svg" alt="" title="PyTorch" loading="lazy"><img src="pics_io/skills/opencv.svg" alt="" title="OpenCV" loading="lazy"></span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>C++ (ROS2, Real-time systems)</span> <span class="skill-logos"><img src="pics_io/skills/cplusplus.svg" alt="" title="C++" loading="lazy"><img src="pics_io/skills/ros.svg" alt="" title="ROS" loading="lazy"></span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>MATLAB & Simulink</span> <span class="skill-logos"><img src="pics_io/skills/matlab.svg" alt="" title="MATLAB" loading="lazy"></span></li>
       </ul>
     </div>
     <div class="skill-category animate-on-scroll">
       <h3 class="skill-title"><i class="fas fa-robot"></i> Robotics & Simulation</h3>
       <ul class="skill-list">
-        <li class="skill-item"><span class="skill-dot"></span> <span>ROS1 / ROS2</span></li>
-        <!-- <li class="skill-item"><span class="skill-dot"></span> <span>Genesis</span></li> -->
-        <li class="skill-item"><span class="skill-dot"></span> <span>MuJoCo, Isaac Sim</span></li>
-        <li class="skill-item"><span class="skill-dot"></span> <span>PX4 Autopilot</span></li>
-        <li class="skill-item"><span class="skill-dot"></span> <span>Genesis</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>ROS1 / ROS2</span> <span class="skill-logos"><img src="pics_io/skills/ros.svg" alt="" title="ROS" loading="lazy"></span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>MuJoCo, Isaac Sim</span> <span class="skill-logos"><img src="pics_io/skills/mujoco.png" alt="" title="MuJoCo" loading="lazy"><img src="pics_io/skills/nvidia.svg" alt="" title="NVIDIA Isaac Sim" loading="lazy"></span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>PX4 Autopilot</span> <span class="skill-logos"><img src="pics_io/skills/px4.svg" alt="" title="PX4" loading="lazy"></span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>Genesis</span> <span class="skill-logos"><img src="pics_io/skills/genesis.png" alt="" title="Genesis" loading="lazy"></span></li>
       </ul>
     </div>
     <div class="skill-category animate-on-scroll">
       <h3 class="skill-title"><i class="fas fa-tools"></i> Dev Tools</h3>
       <ul class="skill-list">
-        <li class="skill-item"><span class="skill-dot"></span> <span>Docker</span></li>
-        <li class="skill-item"><span class="skill-dot"></span> <span>Git / GitHub</span></li>
-        <li class="skill-item"><span class="skill-dot"></span> <span>Linux / Ubuntu</span></li>
-        <li class="skill-item"><span class="skill-dot"></span> <span>CATIA (CAD)</span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>Docker</span> <span class="skill-logos"><img src="pics_io/skills/docker.svg" alt="" title="Docker" loading="lazy"></span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>Git / GitHub</span> <span class="skill-logos"><img src="pics_io/skills/git.svg" alt="" title="Git" loading="lazy"><img src="pics_io/skills/github.svg" alt="" title="GitHub" loading="lazy"></span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>Linux / Ubuntu</span> <span class="skill-logos"><img src="pics_io/skills/linux.png" alt="" title="Linux" loading="lazy"><img src="pics_io/skills/ubuntu.svg" alt="" title="Ubuntu" loading="lazy"></span></li>
+        <li class="skill-item"><span class="skill-dot"></span> <span>CATIA (CAD)</span> <span class="skill-logos"><img src="pics_io/skills/dassaultsystemes.svg" alt="" title="CATIA (Dassault Systèmes)" loading="lazy"></span></li>
       </ul>
     </div>
   </div>
@@ -1786,17 +1898,18 @@ function initScrollAnimations() {
 }
 
 // Experience World Map
-// id: ISO 3166 numeric country code (as used by world-atlas). tier: 'home' = dark blue, 'visit' = light blue.
+// id: ISO 3166 numeric country code (as used by world-atlas); flag: file in pics_io/flags/ (ISO alpha-2).
+// tier: 'home' = dark blue, 'visit' = light blue.
 // Chips under the map follow this order.
 const MAP_COUNTRIES = [
-  { id: '410', name: 'South Korea', tier: 'home', items: [['MSc at GIST', '2020 – 2022'], ['Humanoids Conference', '2025']] },
-  { id: '380', name: 'Italy', tier: 'home', items: [['PhD at Polimi & IIT'], ['AIM Conference, Genova', '2026'], ['I-RIM Summer School']] },
-  { id: '156', name: 'China', tier: 'visit', items: [['ZJU Summer School', '2026']] },
-  { id: '276', name: 'Germany', tier: 'visit', items: [['BioRob Conference, Heidelberg', '2024'], ['Period abroad @ TUM'], ['Robothon® – The Grand Challenge', '2023']] },
-  { id: '250', name: 'France', tier: 'visit', items: [['Bootcamp at ENSTA Paris', '2024']] },
-  { id: '300', name: 'Greece', tier: 'visit', items: [['Period abroad at FORTH, Crete']] },
-  { id: '040', name: 'Austria', tier: 'visit', items: [['ENRICH Hackathon', '2025']] },
-  { id: '528', name: 'Netherlands', tier: 'visit', items: [['ICRA@40 Conference']] }
+  { id: '410', flag: 'kr', name: 'South Korea', tier: 'home', items: [['MSc at GIST', '2020 – 2022'], ['Humanoids Conference', '2025']] },
+  { id: '380', flag: 'it', name: 'Italy', tier: 'home', items: [['PhD at Polimi & IIT'], ['AIM Conference, Genova', '2026'], ['I-RIM Summer School']] },
+  { id: '156', flag: 'cn', name: 'China', tier: 'visit', items: [['ZJU Summer School', '2026']] },
+  { id: '276', flag: 'de', name: 'Germany', tier: 'visit', items: [['BioRob Conference, Heidelberg', '2024'], ['Period abroad @ TUM'], ['Robothon® – The Grand Challenge', '2023']] },
+  { id: '250', flag: 'fr', name: 'France', tier: 'visit', items: [['Bootcamp at ENSTA Paris', '2024']] },
+  { id: '300', flag: 'gr', name: 'Greece', tier: 'home', items: [['Period abroad at FORTH, Crete']] },
+  { id: '040', flag: 'at', name: 'Austria', tier: 'visit', items: [['ENRICH Hackathon', '2025']] },
+  { id: '528', flag: 'nl', name: 'Netherlands', tier: 'visit', items: [['ICRA@40 Conference']] }
 ];
 
 function initWorldMap() {
@@ -1847,6 +1960,8 @@ function initWorldMap() {
     countries.filter(d => visited.has(d.id)).raise();
 
     const tip = d3.select('#map-tooltip');
+    const flagSrc = c => `pics_io/flags/${c.flag}.svg`;
+    MAP_COUNTRIES.forEach(c => { new Image().src = flagSrc(c); }); // preload so flags show on the first hover
     let anchorId = null; // set while the tooltip is pinned to a country (chip hover/click) rather than the pointer
 
     function placeTip(x, y) {
@@ -1873,7 +1988,9 @@ function initWorldMap() {
     function show(id) {
       const c = visited.get(id);
       tip.attr('class', `map-tooltip ${c.tier}`).html('').attr('hidden', null);
-      tip.append('strong').text(c.name);
+      const head = tip.append('strong');
+      head.append('img').attr('class', 'map-flag').attr('src', flagSrc(c)).attr('alt', '');
+      head.append('span').text(c.name);
       const ul = tip.append('ul');
       c.items.forEach(([title, when]) => {
         const li = ul.append('li').text(title);
