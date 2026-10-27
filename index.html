@@ -346,6 +346,12 @@ section {
   flex-shrink: 0;
 }
 
+.edu-logos {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
 .edu-logo img {
   width: 100%;
   height: 100%;
@@ -402,12 +408,75 @@ section {
   overflow: hidden;
   transition: all 0.4s ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-card:hover {
   transform: translateY(-5px) scale(1.02);
   border-color: var(--accent-cyan);
   box-shadow: 0 10px 40px rgba(0, 240, 255, 0.2);
+}
+
+/* Image slot: shows the placeholder until the <img> loads (a missing file removes itself via onerror) */
+.project-media,
+.event-media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.18);
+  border-bottom: 1px solid var(--border);
+}
+
+.project-media { aspect-ratio: 4 / 3; }
+.event-media { aspect-ratio: 16 / 10; }
+
+.project-media img,
+.event-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* Paper figures: keep the whole diagram visible on a white canvas */
+.project-media img {
+  object-fit: contain;
+  background: #fff;
+  padding: 0.75rem;
+}
+
+.project-media.photo img {
+  object-fit: cover;
+  padding: 0;
+}
+
+.project-card:hover .project-media img,
+.event-card:hover .event-media img {
+  transform: scale(1.04);
+}
+
+.media-placeholder {
+  position: absolute;
+  inset: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px dashed rgba(0, 240, 255, 0.35);
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.media-placeholder i {
+  font-size: 2rem;
+  color: var(--accent-cyan);
+  opacity: 0.6;
 }
 
 .project-header {
@@ -445,6 +514,7 @@ section {
 
 .project-body {
   padding: 1.5rem;
+  flex: 1;
 }
 
 .project-title {
@@ -485,6 +555,19 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
+}
+
+/* The footer is light grey, so the neon link colours are swapped for the card's deep indigo */
+.project-footer .project-link {
+  white-space: nowrap;
+  color: var(--bg-secondary);
+  font-weight: 700;
+}
+
+.project-footer .project-link:hover {
+  color: #6b2fd6;
+  text-decoration: underline;
 }
 
 .project-link {
@@ -535,6 +618,30 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.video-caption {
+  max-width: 900px;
+  margin: 1.5rem auto 0;
+  text-align: center;
+}
+
+.video-caption h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.video-caption p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.video-caption .project-link {
+  display: inline-flex;
+  margin-top: 0.75rem;
 }
 
 .video-placeholder {
@@ -688,6 +795,308 @@ section {
   line-height: 1.5;
 }
 
+/* Summer Schools, Workshops & Bootcamps */
+.subsection-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 3.5rem 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.subsection-title i {
+  color: var(--accent-cyan);
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  gap: 1.5rem;
+}
+
+.event-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-card:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.event-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.event-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent-green);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.event-place {
+  color: var(--text-secondary);
+}
+
+.event-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.event-org {
+  font-size: 0.9rem;
+  color: var(--accent-cyan);
+}
+
+.event-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.event-badge {
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  background: rgba(176, 96, 255, 0.15);
+  color: #d2adff;
+  border: 1px solid rgba(176, 96, 255, 0.35);
+}
+
+.event-footer .project-link {
+  font-size: 0.8rem;
+}
+
+/* Experience World Map */
+.world-map-card {
+  --map-land: #4f505d;
+  --map-visit: #8ccfff;
+  --map-home: #1f5ad6;
+  position: relative;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.world-map {
+  position: relative;
+  background: #1d1e26;
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+}
+
+.world-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.world-map svg.zoomed { cursor: grab; }
+.world-map svg.zoomed:active { cursor: grabbing; }
+
+.world-map-status {
+  padding: 6rem 1rem;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.country {
+  fill: var(--map-land);
+  stroke: #1d1e26;
+  stroke-width: 0.5;
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.2s ease;
+}
+
+.country.visit { fill: var(--map-visit); }
+.country.home { fill: var(--map-home); }
+.country.visit:hover, .country.visit.active { fill: #b8e2ff; }
+.country.home:hover, .country.home.active { fill: #3b78f0; }
+
+.country.visit:hover, .country.home:hover, .country.active {
+  stroke: var(--accent-cyan);
+  stroke-width: 1.5;
+}
+
+.map-controls {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.map-controls[hidden] { display: none; }
+
+.map-controls button {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(14, 15, 21, 0.85);
+  color: var(--accent-cyan);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.map-controls button:hover,
+.map-controls button:focus-visible {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+  outline: none;
+}
+
+.map-tooltip {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  max-width: min(280px, calc(100% - 16px));
+  padding: 0.75rem 0.9rem;
+  background: rgba(14, 15, 21, 0.96);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--map-visit);
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  font-size: 0.85rem;
+}
+
+.map-tooltip.home { border-left-color: #3b78f0; }
+
+.map-tooltip strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.map-tooltip ul {
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.map-tooltip li {
+  position: relative;
+  padding-left: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.map-tooltip li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+}
+
+.map-tooltip li span {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent-green);
+}
+
+.map-footer {
+  padding: 1rem 1.25rem 1.25rem;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 0.9rem;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.map-hint {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+}
+
+.map-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.map-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-primary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.map-chip:hover,
+.map-chip:focus-visible,
+.map-chip.active {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+  outline: none;
+}
+
+.chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-swatch.home, .map-chip.home .chip-dot { background: var(--map-home); }
+.legend-swatch.visit, .map-chip.visit .chip-dot { background: var(--map-visit); }
+
+.chip-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent-green);
+}
+
 /* Footer */
 footer {
   border-top: 1px solid var(--border);
@@ -795,6 +1204,8 @@ footer {
     <a href="https://nearlab.polimi.it/neuroengineering-and-medical-robotics/medical/hamidreza-raei/" class="btn btn-primary"><i class="fas fa-globe"></i> View Portfolio</a>
     <a href="https://github.com/Hamidraei23" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
     <a href="https://www.linkedin.com/in/hamidreza-raei-081997/" class="btn btn-outline"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    <a href="https://scholar.google.com/citations?user=oIL6Q5EAAAAJ&amp;hl=en" class="btn btn-outline"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
+    <a href="Hamidreza_Raei_CV.pdf" class="btn btn-outline" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> CV</a>
   </div>
   <div class="scroll-indicator">
     <span>Scroll to explore</span>
@@ -835,8 +1246,13 @@ footer {
   </div>
   <div class="education-grid">
     <div class="edu-card animate-on-scroll">
-      <div class="edu-logo">
-        <img src="https://raw.githubusercontent.com/Hamidraei23/Hamidraei23.github.io/main/pics_io/Logo_Politecnico_Milano.png" alt="Politecnico di Milano">
+      <div class="edu-logos">
+        <div class="edu-logo">
+          <img src="https://raw.githubusercontent.com/Hamidraei23/Hamidraei23.github.io/main/pics_io/Logo_Politecnico_Milano.png" alt="Politecnico di Milano">
+        </div>
+        <div class="edu-logo" title="HRI² Lab, Istituto Italiano di Tecnologia">
+          <img src="pics_io/HRII_IIT_logo.png" alt="HRI² Lab, Istituto Italiano di Tecnologia">
+        </div>
       </div>
       <div class="edu-content">
         <h3 class="edu-degree">PhD in Electronic, Information and Bio-engineering</h3>
@@ -904,39 +1320,70 @@ footer {
 <section id="projects">
   <div class="section-header animate-on-scroll">
     <span class="section-tag">&lt;publications_projects&gt;</span>
-    <h2 class="section-title">Recent Research & Projects</h2>
+    <h2 class="section-title">Publications & Projects</h2>
     <div class="section-divider"></div>
   </div>
   <div class="projects-grid">
     <div class="project-card animate-on-scroll">
+      <a class="project-media" href="pics_io/monofold.png" target="_blank" rel="noopener">
+        <img src="pics_io/monofold.png" alt="Franka arm with wrist camera placing a deformable sheet flat along a generated trajectory" loading="lazy">
+      </a>
       <div class="project-header">
-        <div class="project-icon"><i class="fas fa-paw"></i></div>
-        <span class="project-status">Submitted AIM 2026</span>
+        <div class="project-icon"><i class="fas fa-shirt"></i></div>
+        <span class="project-status">RA-L 2026</span>
       </div>
       <div class="project-body">
-        <h3 class="project-title">Sim-to-Real RL for Ball-Balancing Locomotion on Quadruped Robots</h3>
-        <p class="project-desc">Developed reinforcement learning framework enabling quadruped robots to perform dynamic ball-balancing locomotion with zero-shot sim-to-real transfer using domain randomization.</p>
+        <h3 class="project-title">MonoFold: Monocular Sim-to-Real Manipulation of Deformable Sheets</h3>
+        <p class="project-desc">Monocular perception-to-action pipeline (SAM2, Depth Anything V2, ResNet regressor) that compresses raw RGB into a compact 9-D corner-relative state, driving a mixture-of-experts RL policy trained in a multi-fidelity MuJoCo pipeline. 0.038 m real-world corner error vs. 0.031 m in simulation.</p>
         <div class="project-tags">
-          <span class="tag">Reinforcement Learning</span>
           <span class="tag">Sim-to-Real</span>
-          <span class="tag">Quadruped</span>
+          <span class="tag">Deformable Objects</span>
+          <span class="tag">Mixture of Experts</span>
           <span class="tag">MuJoCo</span>
         </div>
       </div>
       <div class="project-footer">
-        <span class="project-venue"><i class="fas fa-users"></i> Co-authors: Tian*, Raei*, Ajoudani, Trahanias</span>
-        <a href="https://doi.org/placeholder" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
+        <span class="project-venue"><i class="fas fa-users"></i> Co-authors: Raei, Zhao, De Momi, Ajoudani</span>
+        <a href="https://doi.org/10.1109/LRA.2026.3746129" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
 
     <div class="project-card animate-on-scroll">
+      <a class="project-media" href="pics_io/ball_balancing_quadruped.png" target="_blank" rel="noopener">
+        <img src="pics_io/ball_balancing_quadruped.png" alt="Three-stage pipeline: Genesis training, MuJoCo validation, real quadruped deployment" loading="lazy">
+      </a>
+      <div class="project-header">
+        <div class="project-icon"><i class="fas fa-paw"></i></div>
+        <span class="project-status">AIM 2026</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Sim-to-Real RL for Ball-Balancing Locomotion on Quadruped Robots</h3>
+        <p class="project-desc">A single policy trained across 4,096 parallel Genesis environments, validated sim-to-sim in MuJoCo, then deployed on a real quadruped that walks while keeping a ball centred on its back using vision-based ball-state estimation.</p>
+        <div class="project-tags">
+          <span class="tag">Reinforcement Learning</span>
+          <span class="tag">Sim-to-Real</span>
+          <span class="tag">Quadruped</span>
+          <span class="tag">Genesis</span>
+          <span class="tag">MuJoCo</span>
+        </div>
+      </div>
+      <div class="project-footer">
+        <span class="project-venue"><i class="fas fa-users"></i> Co-first authors: Tian*, Raei* · Ajoudani, Trahanias</span>
+        <a href="https://doi.org/10.1109/AIM65483.2026.11658359" class="project-link">View Paper <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <div class="project-card animate-on-scroll">
+      <a class="project-media" href="pics_io/sliding_manipulation.png" target="_blank" rel="noopener">
+        <img src="pics_io/sliding_manipulation.png" alt="Franka Panda sliding an object on a platform from start pose to desired pose" loading="lazy">
+      </a>
       <div class="project-header">
         <div class="project-icon"><i class="fas fa-hand-rock"></i></div>
-        <span class="project-status">Accepted RA-L 2025</span>
+        <span class="project-status">RA-L 2025</span>
       </div>
       <div class="project-body">
         <h3 class="project-title">RL Approach to Non-Prehensile Manipulation Through Sliding</h3>
-        <p class="project-desc">Actor-critic DDPG framework for sliding manipulation with LSTM-based real-time friction estimation. Achieved zero-shot sim-to-real transfer on hardware platforms.</p>
+        <p class="project-desc">Actor-critic DDPG framework for sliding manipulation with LSTM-based real-time friction estimation and domain randomization, achieving zero-shot sim-to-real transfer to a Franka Emika Panda.</p>
         <div class="project-tags">
           <span class="tag">DDPG</span>
           <span class="tag">LSTM</span>
@@ -951,6 +1398,9 @@ footer {
     </div>
 
     <div class="project-card animate-on-scroll">
+      <a class="project-media" href="pics_io/multipurpose_interface.png" target="_blank" rel="noopener">
+        <img src="pics_io/multipurpose_interface.png" alt="Handheld interface: stereo cameras, IMU and Raspberry Pi 4 on an M5 stack" loading="lazy">
+      </a>
       <div class="project-header">
         <div class="project-icon"><i class="fas fa-mobile-alt"></i></div>
         <span class="project-status">BioRob 2024</span>
@@ -972,6 +1422,9 @@ footer {
     </div>
 
     <div class="project-card animate-on-scroll">
+      <a class="project-media" href="pics_io/autonomous_landing.png" target="_blank" rel="noopener">
+        <img src="pics_io/autonomous_landing.png" alt="3D plot of the UAV landing trajectory converging on the moving target's path" loading="lazy">
+      </a>
       <div class="project-header">
         <div class="project-icon"><i class="fas fa-helicopter"></i></div>
         <span class="project-status">ASCC 2022</span>
@@ -994,6 +1447,9 @@ footer {
     </div>
 
     <div class="project-card animate-on-scroll">
+      <a class="project-media photo" href="pics_io/autonomous_driving.png" target="_blank" rel="noopener">
+        <img src="pics_io/autonomous_driving.png" alt="Dash-camera frame with predicted vs. actual vehicle speed" loading="lazy">
+      </a>
       <div class="project-header">
         <div class="project-icon"><i class="fas fa-car-side"></i></div>
         <span class="project-status">Project</span>
@@ -1013,27 +1469,6 @@ footer {
         <a href="https://github.com/Hamidraei23/dashcamera_speed_estimation_CNN" class="project-link">View Code <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
-
-    <div class="project-card animate-on-scroll">
-      <div class="project-header">
-        <div class="project-icon"><i class="fas fa-balance-scale"></i></div>
-        <span class="project-status">Project</span>
-      </div>
-      <div class="project-body">
-        <h3 class="project-title">Ball & Beam Control & Fuzzy-PID Auto Tuner</h3>
-        <p class="project-desc">Engineered precision ball positioning system with servo motor, potentiometer feedback, and Arduino PID control. Developed MATLAB fuzzy logic auto-tuner for PID gains.</p>
-        <div class="project-tags">
-          <span class="tag">MATLAB</span>
-          <span class="tag">Simulink</span>
-          <span class="tag">Fuzzy Logic</span>
-          <span class="tag">Arduino</span>
-        </div>
-      </div>
-      <div class="project-footer">
-        <span class="project-venue"><i class="fas fa-code"></i> C / MATLAB</span>
-        <a href="https://github.com/Hamidraei23" class="project-link">View Code <i class="fas fa-arrow-right"></i></a>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1045,28 +1480,15 @@ footer {
   </div>
   <div class="video-section animate-on-scroll">
     <div class="video-container">
-      <!-- 
-        🎬 VIDEO INSTRUCTIONS:
-        1. Create a folder named 'videos' in the same directory as this HTML file.
-        2. Place your video file inside it (e.g., 'videos/demo.mp4').
-        3. Update the src below: src="videos/demo.mp4"
-        4. Remove the placeholder div.
-      -->
-      <div class="video-placeholder" id="video-placeholder">
-        <i class="fas fa-play-circle"></i>
-        <p>No video loaded</p>
-        <div class="video-instructions">
-          📁 Place your video file in: <code>./videos/</code><br>
-          📝 Update the <code>&lt;video src=""&gt;</code> tag in the HTML<br>
-          🎬 Format: <code>MP4 / WebM</code> | Max recommended: 50MB
-        </div>
-      </div>
-      <!-- Uncomment and update when ready:
-      <video controls poster="videos/thumbnail.jpg">
-        <source src="videos/demo.mp4" type="video/mp4">
+      <video controls preload="metadata" playsinline poster="videos/sliding_manipulation_demo.jpg">
+        <source src="videos/sliding_manipulation_demo.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      -->
+    </div>
+    <div class="video-caption">
+      <h3>Non-Prehensile Manipulation Through Sliding</h3>
+      <p>Hardware transfer of the learned sliding policy on a Franka Emika Panda, followed by friction correction: DDPG alone vs. DDPG with LSTM-based and analytical friction estimates.</p>
+      <a href="https://doi.org/10.1109/LRA.2025.3578238" class="project-link" target="_blank" rel="noopener">RA-L 2025 · View Paper <i class="fas fa-arrow-right"></i></a>
     </div>
   </div>
 </section>
@@ -1096,6 +1518,110 @@ footer {
       <p class="timeline-org">Shahid Mohammad Montazeri Power Plant</p>
       <p class="timeline-desc">Gained practical experience in power plant operations, control systems monitoring, and industrial automation workflows.</p>
     </div>
+  </div>
+
+  <h3 class="subsection-title animate-on-scroll"><i class="fas fa-people-group"></i> Summer Schools, Workshops &amp; Bootcamps</h3>
+  <!--
+    📸 PHOTOS: each card shows a placeholder until its photo exists. Save the photo at the
+    path in that card's <img src="..."> (pics_io/events/...) and it appears automatically.
+  -->
+  <div class="events-grid">
+    <div class="event-card animate-on-scroll">
+      <a class="event-media" href="pics_io/events/zju-2026.jpg" target="_blank" rel="noopener">
+        <img src="pics_io/events/zju-2026.jpg" alt="Program participants in front of the Zhejiang University gate" loading="lazy" style="object-position: 50% 100%">
+      </a>
+      <div class="event-body">
+        <div class="event-meta"><span>Jul 2026</span><span class="event-place"><i class="fas fa-location-dot"></i> Hangzhou, China</span></div>
+        <h4 class="event-title">Global Innovation Practice Program: Industrial AI &amp; Robotics</h4>
+        <p class="event-org">Zhejiang University</p>
+        <div class="event-footer">
+          <span class="event-badge">Summer Program</span>
+          <a href="https://www.zju.edu.cn/english/GlobalInnovation/main.htm" class="project-link" target="_blank" rel="noopener">Program <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-card animate-on-scroll">
+      <a class="event-media" href="pics_io/events/enrich-2025.jpg" target="_blank" rel="noopener">
+        <img src="pics_io/events/enrich-2025.jpg" alt="Team RAICAM with their robots next to the ENRICH 2025 hackathon banner" loading="lazy">
+      </a>
+      <div class="event-body">
+        <div class="event-meta"><span>Jun 2025</span><span class="event-place"><i class="fas fa-location-dot"></i> Vienna, Austria</span></div>
+        <h4 class="event-title">ENRICH 2025 Robotics Hackathon</h4>
+        <p class="event-org">Team RAICAM</p>
+        <div class="event-footer">
+          <span class="event-badge">Hackathon</span>
+          <a href="https://enrich.european-robotics.eu/" class="project-link" target="_blank" rel="noopener">Event <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-card animate-on-scroll">
+      <a class="event-media" href="pics_io/events/ensta-paris-2024.jpg" target="_blank" rel="noopener">
+        <img src="pics_io/events/ensta-paris-2024.jpg" alt="RAICAM bootcamp group photo in the snow at ENSTA Paris" loading="lazy" style="object-position: 50% 100%">
+      </a>
+      <div class="event-body">
+        <div class="event-meta"><span>Nov 2024</span><span class="event-place"><i class="fas fa-location-dot"></i> Paris, France</span></div>
+        <h4 class="event-title">Multi-Robot Mapping, Autonomous Navigation &amp; Coordinated Valve Closure</h4>
+        <p class="event-org">RAICAM @ ENSTA Paris</p>
+        <div class="event-footer">
+          <span class="event-badge">Bootcamp</span>
+          <a href="https://raicam.eu/" class="project-link" target="_blank" rel="noopener">RAICAM <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-card animate-on-scroll">
+      <a class="event-media" href="pics_io/events/genova-2024.jpg" target="_blank" rel="noopener">
+        <img src="pics_io/events/genova-2024.jpg" alt="RAICAM network group photo in front of the RAICAM presentation in Genova" loading="lazy" style="object-position: 50% 85%">
+      </a>
+      <div class="event-body">
+        <div class="event-meta"><span>Mar 2024</span><span class="event-place"><i class="fas fa-location-dot"></i> Genova, Italy</span></div>
+        <h4 class="event-title">Multi-Robot Autonomous Navigation &amp; Teleoperated Inspection with Cobots</h4>
+        <p class="event-org">RAICAM</p>
+        <div class="event-footer">
+          <span class="event-badge">Bootcamp</span>
+          <a href="https://raicam.eu/" class="project-link" target="_blank" rel="noopener">RAICAM <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-card animate-on-scroll">
+      <a class="event-media" href="pics_io/events/robothon-2023.jpg" target="_blank" rel="noopener">
+        <img src="pics_io/events/robothon-2023.jpg" alt="Robot gripper above the Robothon 2023 task board" loading="lazy" style="object-position: 50% 65%">
+      </a>
+      <div class="event-body">
+        <div class="event-meta"><span>Mar 2023</span><span class="event-place"><i class="fas fa-location-dot"></i> Munich, Germany</span></div>
+        <h4 class="event-title">Robothon® – The Grand Challenge 2023</h4>
+        <p class="event-org">Team Upcyclers · Ranked 4th of 20 teams</p>
+        <div class="event-footer">
+          <span class="event-badge">Competition</span>
+          <a href="https://automatica-munich.com/en/munich-i/robothon/teams/" class="project-link" target="_blank" rel="noopener">Teams <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="subsection-title animate-on-scroll"><i class="fas fa-earth-europe"></i> Experience Around the World</h3>
+  <!-- 🌍 The countries and their experiences live in MAP_COUNTRIES in the script at the bottom of this file -->
+  <div class="world-map-card animate-on-scroll" id="world-map-card">
+    <div class="world-map" id="world-map">
+      <p class="world-map-status">Loading map…</p>
+      <div class="map-controls" hidden>
+        <button type="button" data-zoom="in" aria-label="Zoom in" title="Zoom in"><i class="fas fa-plus"></i></button>
+        <button type="button" data-zoom="out" aria-label="Zoom out" title="Zoom out"><i class="fas fa-minus"></i></button>
+        <button type="button" data-zoom="reset" aria-label="Reset view" title="Reset view"><i class="fas fa-expand"></i></button>
+      </div>
+    </div>
+    <div class="map-footer">
+      <div class="map-legend">
+        <span><i class="legend-swatch home"></i> Studied &amp; worked (MSc · PhD)</span>
+        <span><i class="legend-swatch visit"></i> Conferences, schools &amp; research stays</span>
+        <span class="map-hint">hover a country · click a chip to zoom</span>
+      </div>
+      <div class="map-chips" id="map-chips"></div>
+    </div>
+    <div class="map-tooltip" id="map-tooltip" role="tooltip" hidden></div>
   </div>
 </section>
 
@@ -1141,6 +1667,8 @@ footer {
     <div class="footer-links">
       <a href="https://github.com/Hamidraei23" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
       <a href="https://www.linkedin.com/in/hamidreza-raei-081997/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="https://scholar.google.com/citations?user=oIL6Q5EAAAAJ&amp;hl=en" target="_blank" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+      <a href="Hamidreza_Raei_CV.pdf" target="_blank" rel="noopener" aria-label="CV (PDF)"><i class="fas fa-file-pdf"></i></a>
       <a href="https://hamidraei23.github.io/" target="_blank" aria-label="Portfolio"><i class="fas fa-globe"></i></a>
       <a href="mailto:hamidreza.raei@iit.it" aria-label="Email"><i class="fas fa-envelope"></i></a>
     </div>
@@ -1148,6 +1676,8 @@ footer {
   </div>
 </footer>
 
+<script defer src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script>
 // Typing Effect
 const phrases = [
@@ -1188,6 +1718,7 @@ document.addEventListener('DOMContentLoaded', () => {
   typeEffect();
   initCanvas();
   initScrollAnimations();
+  initWorldMap();
 });
 
 // Hacker Grid Canvas Background
@@ -1252,6 +1783,161 @@ function initScrollAnimations() {
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+}
+
+// Experience World Map
+// id: ISO 3166 numeric country code (as used by world-atlas). tier: 'home' = dark blue, 'visit' = light blue.
+// Chips under the map follow this order.
+const MAP_COUNTRIES = [
+  { id: '410', name: 'South Korea', tier: 'home', items: [['MSc at GIST', '2020 – 2022'], ['Humanoids Conference', '2025']] },
+  { id: '380', name: 'Italy', tier: 'home', items: [['PhD at Polimi & IIT'], ['AIM Conference, Genova', '2026'], ['I-RIM Summer School']] },
+  { id: '156', name: 'China', tier: 'visit', items: [['ZJU Summer School', '2026']] },
+  { id: '276', name: 'Germany', tier: 'visit', items: [['BioRob Conference, Heidelberg', '2024'], ['Period abroad @ TUM'], ['Robothon® – The Grand Challenge', '2023']] },
+  { id: '250', name: 'France', tier: 'visit', items: [['Bootcamp at ENSTA Paris', '2024']] },
+  { id: '300', name: 'Greece', tier: 'visit', items: [['Period abroad at FORTH, Crete']] },
+  { id: '040', name: 'Austria', tier: 'visit', items: [['ENRICH Hackathon', '2025']] },
+  { id: '528', name: 'Netherlands', tier: 'visit', items: [['ICRA@40 Conference']] }
+];
+
+function initWorldMap() {
+  const card = document.getElementById('world-map-card');
+  const container = document.getElementById('world-map');
+  const status = container.querySelector('.world-map-status');
+  const visited = new Map(MAP_COUNTRIES.map(c => [c.id, c]));
+  if (!window.d3 || !window.topojson) {
+    status.textContent = 'Map could not be loaded.';
+    return;
+  }
+
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(world => {
+    const all = topojson.feature(world, world.objects.countries).features;
+    // Keep metropolitan France only, so French Guiana isn't drawn across the Atlantic
+    const france = all.find(f => f.id === '250');
+    france.geometry.coordinates = france.geometry.coordinates.filter(poly => poly[0][0][0] > -30);
+    // Drop Antarctica and the Americas (incl. Greenland) so Europe–Asia fills the frame
+    const features = all.filter(f => {
+      const lon = d3.geoCentroid(f)[0];
+      return f.id !== '010' && (lon > -25 || lon < -170);
+    });
+
+    const W = 960;
+    const land = { type: 'FeatureCollection', features };
+    // Centred on 70°E so Russia's far east (past the date line) stays on the right edge
+    const projection = d3.geoNaturalEarth1().rotate([-70, 0]).fitWidth(W, land);
+    const path = d3.geoPath(projection);
+    const H = Math.ceil(path.bounds(land)[1][1]);
+
+    // Largest polygon of a country: used to centre tooltips and zooms on the mainland
+    const mainShape = f => f.geometry.type !== 'MultiPolygon' ? f.geometry : {
+      type: 'Polygon',
+      coordinates: f.geometry.coordinates.reduce((a, b) =>
+        d3.geoArea({ type: 'Polygon', coordinates: a }) >= d3.geoArea({ type: 'Polygon', coordinates: b }) ? a : b)
+    };
+    const shapes = new Map(features.filter(f => visited.has(f.id)).map(f => [f.id, mainShape(f)]));
+
+    status.remove();
+    const svg = d3.select(container).insert('svg', ':first-child')
+      .attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('role', 'img')
+      .attr('aria-label', 'World map highlighting ' + MAP_COUNTRIES.map(c => c.name).join(', '));
+    const g = svg.append('g');
+    const countries = g.selectAll('path').data(features).join('path')
+      .attr('d', path)
+      .attr('class', d => visited.has(d.id) ? `country ${visited.get(d.id).tier}` : 'country');
+    countries.filter(d => visited.has(d.id)).raise();
+
+    const tip = d3.select('#map-tooltip');
+    let anchorId = null; // set while the tooltip is pinned to a country (chip hover/click) rather than the pointer
+
+    function placeTip(x, y) {
+      const node = tip.node();
+      let left = x + 16, top = y + 16;
+      if (left + node.offsetWidth > card.clientWidth - 8) left = x - node.offsetWidth - 16;
+      if (top + node.offsetHeight > card.clientHeight - 8) top = y - node.offsetHeight - 16;
+      node.style.left = Math.max(8, left) + 'px';
+      node.style.top = Math.max(8, top) + 'px';
+    }
+
+    function placeAtPointer(e) {
+      const r = card.getBoundingClientRect();
+      placeTip(e.clientX - r.left, e.clientY - r.top);
+    }
+
+    function placeAtCountry(id) {
+      const [x, y] = d3.zoomTransform(svg.node()).apply(path.centroid(shapes.get(id)));
+      const s = svg.node().getBoundingClientRect(), r = card.getBoundingClientRect();
+      const k = s.width / W;
+      placeTip(s.left - r.left + x * k, s.top - r.top + y * k);
+    }
+
+    function show(id) {
+      const c = visited.get(id);
+      tip.attr('class', `map-tooltip ${c.tier}`).html('').attr('hidden', null);
+      tip.append('strong').text(c.name);
+      const ul = tip.append('ul');
+      c.items.forEach(([title, when]) => {
+        const li = ul.append('li').text(title);
+        if (when) li.append('span').text(when);
+      });
+      countries.classed('active', d => d.id === id);
+      chips.classed('active', c => c.id === id);
+    }
+
+    function hide() {
+      anchorId = null;
+      tip.attr('hidden', true);
+      countries.classed('active', false);
+      chips.classed('active', false);
+    }
+
+    const zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .translateExtent([[0, 0], [W, H]])
+      // ctrl + wheel / trackpad pinch zooms, plain wheel keeps scrolling the page; one-finger touch scrolls too
+      .filter(e => e.type === 'wheel' ? e.ctrlKey : e.touches ? e.touches.length > 1 : !e.button)
+      .on('zoom', e => {
+        g.attr('transform', e.transform);
+        svg.classed('zoomed', e.transform.k > 1);
+        if (anchorId) placeAtCountry(anchorId);
+        else if (e.sourceEvent) hide();
+      });
+    svg.call(zoom).on('dblclick.zoom', null);
+
+    function zoomTo(id) {
+      const [[x0, y0], [x1, y1]] = path.bounds(shapes.get(id));
+      const k = Math.max(1, Math.min(6, 0.5 / Math.max((x1 - x0) / W, (y1 - y0) / H)));
+      svg.transition().duration(750).call(zoom.transform,
+        d3.zoomIdentity.translate(W / 2, H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2));
+    }
+
+    countries.filter(d => visited.has(d.id))
+      .on('pointerenter', (e, d) => { anchorId = null; show(d.id); placeAtPointer(e); })
+      .on('pointermove', e => { if (!anchorId) placeAtPointer(e); })
+      // a tap fires pointerleave right after lifting the finger, so touch tooltips stay until the next tap
+      .on('pointerleave', e => { if (!anchorId && e.pointerType !== 'touch') hide(); });
+    svg.on('click', e => { if (!visited.has(e.target.__data__?.id)) hide(); });
+
+    const chips = d3.select('#map-chips').selectAll('button')
+      .data(MAP_COUNTRIES).join('button')
+      .attr('type', 'button')
+      .attr('class', c => `map-chip ${c.tier}`)
+      .attr('aria-label', c => `${c.name}: ${c.items.map(i => i.join(' ')).join('; ')}`)
+      .html(c => `<span class="chip-dot"></span>${c.name}<span class="chip-count">${c.items.length}</span>`)
+      .on('mouseenter focus', (e, c) => { anchorId = c.id; show(c.id); placeAtCountry(c.id); })
+      .on('mouseleave blur', hide)
+      .on('click', (e, c) => { anchorId = c.id; show(c.id); placeAtCountry(c.id); zoomTo(c.id); });
+
+    container.querySelectorAll('[data-zoom]').forEach(btn => btn.addEventListener('click', () => {
+      const t = svg.transition().duration(450);
+      if (btn.dataset.zoom === 'in') zoom.scaleBy(t, 1.6);
+      else if (btn.dataset.zoom === 'out') zoom.scaleBy(t, 1 / 1.6);
+      else { hide(); zoom.transform(t, d3.zoomIdentity); }
+    }));
+    container.querySelector('.map-controls').hidden = false;
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') hide(); });
+  }).catch(() => {
+    status.textContent = 'Map could not be loaded.';
+  });
 }
 
 // Smooth Scroll for Nav
