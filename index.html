@@ -200,6 +200,73 @@ nav {
   justify-content: center;
 }
 
+/* "Profiles" dropdown in the hero */
+.profile-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.profile-caret {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+#profiles-btn[aria-expanded="true"] .profile-caret {
+  transform: rotate(180deg);
+}
+
+.profile-list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  min-width: 260px;
+  padding: 0.4rem;
+  background: rgba(14, 15, 21, 0.97);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  text-align: left;
+}
+
+.profile-list[hidden] { display: none; }
+
+.profile-list a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.profile-list a:hover,
+.profile-list a:focus-visible {
+  background: rgba(0, 240, 255, 0.08);
+  outline: none;
+}
+
+.profile-list i {
+  width: 1.2rem;
+  color: var(--accent-cyan);
+  text-align: center;
+}
+
+.profile-list strong {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.profile-list small {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
 .btn {
   padding: 0.9rem 2rem;
   border-radius: 8px;
@@ -1379,7 +1446,13 @@ footer {
   <p class="hero-subtitle">Robotics & Reinforcement Learning </p>
   <div class="typing-text" id="typing-text"></div>
   <div class="hero-actions">
-    <a href="https://nearlab.polimi.it/neuroengineering-and-medical-robotics/medical/hamidreza-raei/" class="btn btn-primary"><i class="fas fa-globe"></i> View Portfolio</a>
+    <div class="profile-menu">
+      <button type="button" class="btn btn-primary" id="profiles-btn" aria-haspopup="true" aria-expanded="false" aria-controls="profiles-list"><i class="fas fa-globe"></i> Profiles <i class="fas fa-chevron-down profile-caret"></i></button>
+      <div class="profile-list" id="profiles-list" hidden>
+        <a href="https://hamidraei23.github.io/"><i class="fas fa-house"></i><span><strong>Personal website</strong><small>hamidraei23.github.io</small></span></a>
+        <a href="https://nearlab.polimi.it/neuroengineering-and-medical-robotics/medical/hamidreza-raei/"><i class="fas fa-flask"></i><span><strong>NearLab profile</strong><small>Politecnico di Milano</small></span></a>
+      </div>
+    </div>
     <a href="https://github.com/Hamidraei23" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
     <a href="https://www.linkedin.com/in/hamidreza-raei-081997/" class="btn btn-outline"><i class="fab fa-linkedin"></i> LinkedIn</a>
     <a href="https://scholar.google.com/citations?user=oIL6Q5EAAAAJ&amp;hl=en" class="btn btn-outline"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
@@ -2213,9 +2286,23 @@ function initWorldMap() {
   });
 }
 
-// Contact form: FormSubmit emails each message to the address in the endpoint.
-// The very first submission sends a one-time "Activate Form" email to that address; messages arrive after it's clicked.
-const FORM_ENDPOINT = 'https://formsubmit.co/ajax/hamidraei23@gmail.com';
+// Profiles menu in the hero
+const profilesBtn = document.getElementById('profiles-btn');
+const profilesList = document.getElementById('profiles-list');
+const setProfilesOpen = open => {
+  profilesList.hidden = !open;
+  profilesBtn.setAttribute('aria-expanded', String(open));
+};
+profilesBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  setProfilesOpen(profilesList.hidden);
+});
+document.addEventListener('click', e => { if (!profilesList.contains(e.target)) setProfilesOpen(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') setProfilesOpen(false); });
+
+// Contact form: FormSubmit emails each message to hamidraei23@gmail.com.
+// The endpoint uses FormSubmit's random alias for that address (from the activation email) instead of the address itself.
+const FORM_ENDPOINT = 'https://formsubmit.co/ajax/791baca50ca853aa1e95133494b3250e';
 const contactForm = document.getElementById('contact-form');
 contactForm.addEventListener('submit', async e => {
   e.preventDefault();
