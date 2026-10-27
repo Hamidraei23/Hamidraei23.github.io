@@ -1149,6 +1149,131 @@ section {
   color: var(--accent-green);
 }
 
+/* Contact */
+.contact-card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.contact-text {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.75rem;
+}
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+  text-align: left;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 0.4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-form textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.form-honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+}
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form-footer .btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+}
+
+.form-status {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.form-status.ok { color: var(--accent-green); }
+.form-status.err { color: #ff9a9a; }
+
+.contact-alt {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.contact-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--accent-cyan);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.contact-copy:hover {
+  border-color: var(--accent-cyan);
+}
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
 /* Footer */
 footer {
   border-top: 1px solid var(--border);
@@ -1236,11 +1361,12 @@ footer {
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#education">Education</a></li>
-    <li><a href="#projects">Projects</a></li>
+    <li><a href="#projects">Publications</a></li>
     <li><a href="#robot-playground">Robot lab</a></li>
     <li><a href="#video">Demos</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
@@ -1774,6 +1900,36 @@ footer {
   </div>
 </section>
 
+<section id="contact">
+  <div class="section-header animate-on-scroll">
+    <span class="section-tag">&lt;contact&gt;</span>
+    <h2 class="section-title">Get in Touch</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="contact-card animate-on-scroll">
+    <p class="contact-text">Open to research collaborations and opportunities in robot learning and manipulation. Send me a message and it will land straight in my inbox.</p>
+    <!-- Messages are delivered by FormSubmit (formsubmit.co); see the "Contact form" script at the bottom -->
+    <form class="contact-form" id="contact-form">
+      <div class="form-row">
+        <label>Name<input type="text" name="name" required maxlength="100" autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required maxlength="200" autocomplete="email"></label>
+      </div>
+      <label>Message<textarea name="message" required maxlength="5000" rows="6"></textarea></label>
+      <!-- honeypot: hidden from people, bots tend to fill it -->
+      <input type="text" name="_honey" class="form-honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="form-footer">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send message</button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+    <div class="contact-alt">
+      <span>Or email me directly:</span>
+      <a href="mailto:hamidraei23@gmail.com" class="project-link"><i class="fas fa-envelope"></i> hamidraei23@gmail.com</a>
+      <button type="button" class="contact-copy" id="copy-email" data-email="hamidraei23@gmail.com"><i class="fas fa-copy"></i> Copy</button>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-content">
     <div class="footer-links">
@@ -2056,6 +2212,58 @@ function initWorldMap() {
     status.textContent = 'Map could not be loaded.';
   });
 }
+
+// Contact form: FormSubmit emails each message to the address in the endpoint.
+// The very first submission sends a one-time "Activate Form" email to that address; messages arrive after it's clicked.
+const FORM_ENDPOINT = 'https://formsubmit.co/ajax/hamidraei23@gmail.com';
+const contactForm = document.getElementById('contact-form');
+contactForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const status = contactForm.querySelector('.form-status');
+  const button = contactForm.querySelector('button[type="submit"]');
+  const data = Object.fromEntries(new FormData(contactForm));
+  if (data._honey) { contactForm.reset(); return; } // a bot filled the hidden field
+  button.disabled = true;
+  status.className = 'form-status';
+  status.textContent = 'Sending…';
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        _replyto: data.email,
+        _subject: `Website message from ${data.name}`,
+        _template: 'table'
+      })
+    });
+    const result = await res.json().catch(() => ({}));
+    if (!res.ok || String(result.success) !== 'true') throw new Error(result.message || `HTTP ${res.status}`);
+    contactForm.reset();
+    status.classList.add('ok');
+    status.textContent = 'Thanks! Your message has been sent.';
+  } catch (err) {
+    status.classList.add('err');
+    status.textContent = `Sorry, the message couldn't be sent (${err.message}). Please email me directly below.`;
+  } finally {
+    button.disabled = false;
+  }
+});
+
+// Copy email to clipboard
+const copyEmailBtn = document.getElementById('copy-email');
+copyEmailBtn.addEventListener('click', async () => {
+  const label = copyEmailBtn.innerHTML;
+  try {
+    await navigator.clipboard.writeText(copyEmailBtn.dataset.email);
+    copyEmailBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
+  } catch {
+    copyEmailBtn.innerHTML = '<i class="fas fa-xmark"></i> Copy failed';
+  }
+  setTimeout(() => { copyEmailBtn.innerHTML = label; }, 2000);
+});
 
 // Smooth Scroll for Nav
 document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
